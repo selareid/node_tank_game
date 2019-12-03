@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tank Game</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        var socket = io();
+        let userId;
+
+        socket.on('userId', function (d) {
+            console.log('user id ' + d);
+            userId = d;
+        });
+
+        socket.on('disconnect', function () {
+            console.log('disconnected from server');
+            document.body.innerHTML = "SERVER DISCONNECTED <br> ATTEMPTING RECONNECT";
+            window.location.reload();
+        });
+    </script>
+</head>
+<body>
+    <div id="userList"></div>
+</body>
+<script>
+    //grid width and height
+    var bw;
+    var bh;
+
+    //padding around grid
+    var p = 15;
+
+    //size of canvas
+    var cw;
+    var ch;
+
+    var canvas;
+    var context;
+
+    let localUserList = {};
+    let topLeftPos = {x: 0, y: 0};
+
+    function drawBoard() {
+        context.clearRect(0, 0, cw, ch);
+
+        for (var x = 0; x <= bw; x += 10) {
+            context.moveTo(0.5 + x*5 + p, p);
+            context.lineTo(0.5 + x*5 + p, bh*5 + p);
+            context.font = '10px sans-serif';
+            context.fillStyle = 'green';
+            context.fillText(Math.floor(topLeftPos.x+x), -5 + x*5 + p, p);
+        }
+
+        for (var x = 0; x <= bh; x += 10) {
+            context.moveTo(p, 0.5 + x*5 + p);
+            context.lineTo(bw*5 + p, 0.5 + x*5 + p);
+            context.font = '10px sans-serif';
+            context.fillStyle = 'green';
+            context.fillText(Math.floor(topLeftPos.y+x), 0, +5 + x*5 + p)
+        }
+
+        context.strokeStyle = "black";
+        context.stroke();
+
+        for (let uId in localUserList) {
+            let u = localUserList[uId];
+
+            context.fillStyle = userId == uId ? 'rgba(0,255,0,0.75)' : 'rgba(64,64,285,0.75)';
+            context.fillRect(p+u.position.x*5-20-topLeftPos.x*5, p+u.position.y*5-20-topLeftPos.y*5, 40, 40);
+        }
+    }
+
+    socket.on('worldInfo', function (worldInfo) {
+        bw = worldInfo.width;
+        bh = worldInfo.height;
+        cw = bw*5 + (p * 2) + 1;
+        ch = bh*5 + (p * 2) + 1;
+        canvas = $('<canvas/>').attr({id: "mainCanvas", width: cw, height: ch}).appendTo('body')
+        context = canvas.get(0).getContext("2d")
+
+        drawBoard();
+
+        let mouseButtonDown = false;
+
+        document.getElementById('mainCanvas').addEventListener('mousedown', function (event) {
+            if (event.button === 0) mouseButtonDown = true;
+        });
+
+        document.addEventListener('mouseup', function (event) {
+            if (event.button === 0) mouseButtonDown = false;
+        });
+
+        document.getElementById('mainCanvas').addEventListener('mousemove', function (event) {
+            if (!mouseButtonDown) return;
+            topLeftPos.x -= Math.floor(event.movementX*1000/5)/1000;
+            topLeftPos.y -= Math.floor(event.movementY*1000/5)/1000;
+            drawBoard();
+        });
+
+        socket.emit('getUserList');
+        socket.on('userList', function (ul) {
+            if (!userId) socket.emit('getUserList');
+            localUserList = ul;
+            drawBoard();
+        });
+
+        socket.emit('getEntities');
+        socket.on('entities', function (entities) {
+
+        });
+    });
+
+    socket.on('userDisconnected', function (disconnectedId) {
+        delete localUserList[disconnectedId];
+        drawBoard();
+    });
+
+
+    function move(x, y) {
+        localUserList[userId].position = {x, y};
+        drawBoard();
+        socket.emit('userMove', {x: x, y: y});
+    }
+    socket.on('userMoved', (info) => {
+        localUserList[info.id].position = info.position;
+        drawBoard();
+    });
+</script>
+</html>
