@@ -15,7 +15,7 @@ function drawBoard() {
     context.clearRect(0, 0, cw, ch); //clears the canvas
 
     //draw grid start
-    for (var x = 0; x <= bw; x += 10) {
+    for (let x = 0; x <= bw; x += 10) {
         context.moveTo(0.5 + x*5 + p, p);
         context.lineTo(0.5 + x*5 + p, bh*5 + p);
         context.font = '10px sans-serif';
@@ -23,7 +23,7 @@ function drawBoard() {
         context.fillText(Math.floor(topLeftPos.x+x), -5 + x*5 + p, p);
     }
 
-    for (var x = 0; x <= bh; x += 10) {
+    for (let x = 0; x <= bh; x += 10) {
         context.moveTo(p, 0.5 + x*5 + p);
         context.lineTo(bw*5 + p, 0.5 + x*5 + p);
         context.font = '10px sans-serif';
@@ -40,10 +40,10 @@ function drawBoard() {
             let entity = localGameStateLatest.entities[entityId];
 
             switch (entity.type) {
-                case Entities.ENTITY_WALL:
+                case Constants.ENTITY_WALL:
                     context.fillStyle = 'rgba(60,60,60,0.85)';
                     context.fillRect(p+entity.position.x*5-topLeftPos.x*5, p+entity.position.y*5-topLeftPos.y*5,
-                        entity.orientation === Entities.ORIENTATION_HORIZONTAL ? 10*5 : entity.length*5, entity.orientation === Entities.ORIENTATION_HORIZONTAL ? entity.length*5 : 10*5);
+                        entity.orientation === Constants.ORIENTATION_HORIZONTAL ? 10*5 : entity.length*5, entity.orientation === Constants.ORIENTATION_HORIZONTAL ? entity.length*5 : 10*5);
                     break;
             }
         }
@@ -58,4 +58,11 @@ function drawBoard() {
         context.fillRect(p+u.position.x*5-20-topLeftPos.x*5, p+u.position.y*5-20-topLeftPos.y*5, 40, 40);
     }
     //draw players end
+}
+
+
+function center(redraw = true) {
+    topLeftPos = {x: localUserList[userId].position.x-bw/2, y: localUserList[userId].position.y-bh/2};
+
+    if (redraw) drawBoard();
 }

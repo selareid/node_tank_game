@@ -75,9 +75,12 @@
         socket.on('userList', function (ul) {
             if (!userId) socket.emit('getUserList'); //who am I not received yet
             //if first load of list this session, center on player
-            if (Object.keys(localUserList).length === 0) topLeftPos = {x: ul[userId].position.x-bw/2, y: ul[userId].position.y-bh/2};
+            if (Object.keys(localUserList).length === 0) {
+                localUserList = ul;
+                center(false);
+            }
+            else localUserList = ul;
 
-            localUserList = ul;
             drawBoard();
             updateSideBar();
         });
@@ -104,7 +107,9 @@
         drawBoard();
         updateSideBar();
         socket.emit('userMove', {x: x, y: y});
+        center();
     }
+
     socket.on('userMoved', (info) => {
         localUserList[info.id].position = info.position;
         updateSideBar();

@@ -32,8 +32,8 @@ function getNewPlayerId() {
 function run() {
     world = new World(100, 100);
 
-    world.addEntity(Entities.ENTITY_WALL, {x: 20, y: 20}, {orientation: Entities.ORIENTATION_VERTICAL, length: 20});
-    world.addEntity(Entities.ENTITY_WALL, {x: 40, y: 40}, {orientation: Entities.ORIENTATION_HORIZONTAL, length: 40});
+    world.addEntity(Constants.ENTITY_WALL, {x: 20, y: 20}, {orientation: Constants.ORIENTATION_VERTICAL, length: 20});
+    world.addEntity(Constants.ENTITY_WALL, {x: 40, y: 40}, {orientation: Constants.ORIENTATION_HORIZONTAL, length: 40});
     //{type: type, position: position, length: other.length, orientation: other.orientation}
 
     io.on('connection', function (socket) {
@@ -48,11 +48,10 @@ function run() {
         socket.emit('worldInfo', {width: world.width, height: world.height, time: world.time});
         io.emit('userList', players);
 
-        socket.on('userMove', (newPosition) => {console.log('yomo ' + JSON.stringify(players[playerId]));
+        socket.on('userMove', (newPosition) => {
             let moveStatus = players[playerId].move(world, newPosition);
             // players[playerId].position.set(newPosition.x, newPosition.y); the old way
-            console.log(moveStatus);
-            if (moveStatus === OK || moveStatus === ERR_SUCCEEDED) socket.broadcast.emit('userMoved', {id: playerId, position: players[playerId].position});
+            if (moveStatus === Constants.OK || moveStatus === Constants.ERR_SUCCEEDED) socket.broadcast.emit('userMoved', {id: playerId, position: players[playerId].position});
             else socket.emit('userMoved', {id: playerId, position: players[playerId].position});
         });
 
