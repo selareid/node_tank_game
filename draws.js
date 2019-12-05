@@ -16,22 +16,35 @@ function drawBoard() {
 
     //draw grid start
     for (let x = 0; x <= bw; x += 10) {
+        context.beginPath();
+
+        context.strokeStyle = !worldInfo || x+topLeftPos.x < worldInfo.width/2 ? 'black' : 'red';
+
         context.moveTo(0.5 + x*5 + p, p);
         context.lineTo(0.5 + x*5 + p, bh*5 + p);
+
         context.font = '10px sans-serif';
         context.fillStyle = 'green';
         context.fillText(Math.floor(topLeftPos.x+x), -5 + x*5 + p, p);
+
+        context.stroke();
     }
 
-    for (let x = 0; x <= bh; x += 10) {
-        context.moveTo(p, 0.5 + x*5 + p);
-        context.lineTo(bw*5 + p, 0.5 + x*5 + p);
+    for (let y = 0; y <= bh; y += 10) {
+        context.beginPath();
+
+        context.strokeStyle = !worldInfo || y+topLeftPos.y < worldInfo.width/2 ? 'black' : 'red';
+
+        context.moveTo(p, 0.5 + y*5 + p);
+        context.lineTo(bw*5 + p, 0.5 + y*5 + p);
         context.font = '10px sans-serif';
         context.fillStyle = 'green';
-        context.fillText(Math.floor(topLeftPos.y+x), 0, +5 + x*5 + p)
+        context.fillText(Math.floor(topLeftPos.y+y), 0, +5 + y*5 + p);
+
+        context.stroke();
     }
-    context.strokeStyle = "black";
-    context.stroke();
+    // context.strokeStyle = "black";
+    // context.stroke();
     //draw grid end
 
     //draw entities start

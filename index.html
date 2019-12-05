@@ -49,8 +49,8 @@
     let localGameStateLatest = {};
     let topLeftPos = {x: 0, y: 0};
 
-    socket.on('worldInfo', function (worldInfo) {
-        this.worldInfo = worldInfo;
+    socket.on('worldInfo', function (givenWorldInfo) {
+        worldInfo = givenWorldInfo;
 
         drawBoard();
 
@@ -103,10 +103,11 @@
 
 
     function move(x, y) {
-        localUserList[userId].position = {x, y};
+        localUserList[userId].position = {x: localUserList[userId].position.x+x, y: localUserList[userId].position.y+y};
+        console.log(localUserList[userId].position);
         drawBoard();
         updateSideBar();
-        socket.emit('userMove', {x: x, y: y});
+        socket.emit('userMove', localUserList[userId].position);
         center();
     }
 
