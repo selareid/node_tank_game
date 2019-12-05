@@ -1,3 +1,4 @@
+require('./Constants.js');
 let World = require('./World.js');
 
 let app = require('express')();
@@ -38,6 +39,9 @@ function getNewPlayerId() {
 function run() {
     world = new World(100, 100);
 
+    world.addEntity(Entities.ENTITY_WALL, {x: 20, y: 20}, {orientation: Entities.ORIENTATION_VERTICAL, length: 20});
+    //{type: type, position: position, length: other.length, orientation: other.orientation}
+
     io.on('connection', function (socket) {
         console.log('connection ' + socket.id);
 
@@ -71,8 +75,10 @@ function run() {
      */
 
     //loop start (TODO)
-    world.simulate(); //TODO simulate world
-    io.emit('gameState', world.getGameState()); //send game state to users
+    setInterval(() => {
+        world.simulate(); //TODO simulate world
+        io.emit('gameState', world.getGameState()); //send game state to users
+    }, 1000);
     //loop end
 }
 

@@ -6,6 +6,11 @@ class World {
     connectedPlayers = {}; //socket: id
     entities = {};
 
+    /*
+     * arguments: the world dimensions
+     * half is negative, half positive
+     * (so max width is half the width dimension)
+     */
     constructor(width, height) {
         this.time = 0;
         this.width = width;
@@ -20,7 +25,7 @@ class World {
 
             switch (entity.type) {
                 case Entities.ENTITY_BULLET:
-                    if (Math.abs(entity.position.x) < this.width && Math.abs(entity.position.y) < this.height) entity.position.transform(entity.velocity.x, entity.velocity.y);
+                    if (Math.abs(entity.position.x) < this.width/2 && Math.abs(entity.position.y) < this.height) entity.position.transform(entity.velocity.x, entity.velocity.y);
                     break;
                 case Entities.ENTITY_WALL:
                     break;
@@ -28,19 +33,20 @@ class World {
         }
     }
 
-    addEntity(type, position, velocity) {
+    addEntity(type, position, other = {}) {
         let entityId;
 
         do {
             entityId = Math.floor(Math.random() * 9999999);
         } while (this.entities[entityId] !== undefined && this.entities[entityId] !== null);
 
-        this.entities[entityId] = {type: type, position: position, velocity: velocity};
+        if (type === Entities.ENTITY_WALL) this.entities[entityId] = {type: type, position: position, length: other.length, orientation: other.orientation};
+        else this.entities[entityId] = {type: type, position: position, velocity: other.velocity};
     }
 
     newConnectedPlayer(socketId, playerId) {
         this.connectedPlayers[socketId] = playerId;
-        players[playerId].position = new Position(Math.floor(Math.random()*this.width), Math.floor(Math.random()*this.height));
+        players[playerId].position = new Position(Math.floor(Math.random()*this.width-this.width/2), Math.floor(Math.random()*this.height-this.height/2));
     }
 
     disconnectedPlayer(socketId) {
@@ -94,11 +100,6 @@ class Velocity {
         this.y += y;
     }
 }
-
-let Entities = {
-    ENTITY_WALL: 'wall',
-    ENTITY_BULLET: 'bullet'
-};
 
 let WorldPlayer = { //gets called by function in Player class
     ACTION_SHOOT: 'shoot',

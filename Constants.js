@@ -1,0 +1,7 @@
+Entities = {
+    ENTITY_WALL: 'wall',
+    ENTITY_BULLET: 'bullet',
+
+    ORIENTATION_VERTICAL: 0,
+    ORIENTATION_HORIZONTAL: 1
+};

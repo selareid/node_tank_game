@@ -22,29 +22,45 @@
     </script>
 </head>
 <body>
-    <div id="userList"></div>
+    <div id="playArea" style="float: left;"></div>
+    <div id="sideBar" style="float: left; width:max-content; height: auto; padding-left: 25px;">
+        <p id="time">____</p>
+        <p id="userListP"></p>
+    </div>
 </body>
 <script>
     //grid width and height
-    var bw;
-    var bh;
+    let bw = 100;
+    let bh = 100;
 
     //padding around grid
-    var p = 15;
-
+    let p = 15;
+ 
     //size of canvas
-    var cw;
-    var ch;
+    let cw = bw*5 + (p * 2) + 1;
+    let ch = bh*5 + (p * 2) + 1;
+    let canvas = $('<canvas/>').attr({id: "mainCanvas", width: cw, height: ch}).appendTo($('#playArea'));
+    let context = canvas.get(0).getContext("2d");
 
-    var canvas;
-    var context;
-
+    let worldInfo;
     let localUserList = {};
     let topLeftPos = {x: 0, y: 0};
 
-    function drawBoard() {
-        context.clearRect(0, 0, cw, ch);
+    function updateSideBar() {
+        //draw user at top
+        $('#userListP').html(`${userId}: <br>&emsp; position: {x: ${localUserList[userId].position.x}, y: ${localUserList[userId].position.y}}`);
 
+        //draw other users
+        for (let uId in localUserList) {
+            if (uId == userId) continue;
+            $('#userListP').append(`<br>${uId}: <br>&emsp; position: {x: ${localUserList[uId].position.x}, y: ${localUserList[uId].position.y}}`);
+        }
+    }
+
+    function drawBoard() {
+        context.clearRect(0, 0, cw, ch); //clears the canvas
+
+        //draw grid start
         for (var x = 0; x <= bw; x += 10) {
             context.moveTo(0.5 + x*5 + p, p);
             context.lineTo(0.5 + x*5 + p, bh*5 + p);
@@ -60,25 +76,22 @@
             context.fillStyle = 'green';
             context.fillText(Math.floor(topLeftPos.y+x), 0, +5 + x*5 + p)
         }
-
         context.strokeStyle = "black";
         context.stroke();
+        //draw grid end
 
+        //draw players start
         for (let uId in localUserList) {
             let u = localUserList[uId];
 
             context.fillStyle = userId == uId ? 'rgba(0,255,0,0.75)' : 'rgba(64,64,285,0.75)';
             context.fillRect(p+u.position.x*5-20-topLeftPos.x*5, p+u.position.y*5-20-topLeftPos.y*5, 40, 40);
         }
+        //draw players end
     }
 
     socket.on('worldInfo', function (worldInfo) {
-        bw = worldInfo.width;
-        bh = worldInfo.height;
-        cw = bw*5 + (p * 2) + 1;
-        ch = bh*5 + (p * 2) + 1;
-        canvas = $('<canvas/>').attr({id: "mainCanvas", width: cw, height: ch}).appendTo('body')
-        context = canvas.get(0).getContext("2d")
+        this.worldInfo = worldInfo;
 
         drawBoard();
 
@@ -101,30 +114,42 @@
 
         socket.emit('getUserList');
         socket.on('userList', function (ul) {
-            if (!userId) socket.emit('getUserList');
+            if (!userId) socket.emit('getUserList'); //who am I not received yet
+            //if first load of list this session, center on player
+            if (Object.keys(localUserList).length === 0) topLeftPos = {x: ul[userId].position.x-bw/2, y: ul[userId].position.y-bh/2};
+
             localUserList = ul;
             drawBoard();
+            updateSideBar();
         });
 
         socket.emit('getEntities');
         socket.on('entities', function (entities) {
-
+            console.log(entities);
         });
+
+        socket.on('gameState', function (data) {
+            $('#time').text(data.time);
+            console.log('REMINDER: do things game simulation');
+        }); //TODO TODO
     });
 
     socket.on('userDisconnected', function (disconnectedId) {
         delete localUserList[disconnectedId];
         drawBoard();
+        updateSideBar();
     });
 
 
     function move(x, y) {
         localUserList[userId].position = {x, y};
         drawBoard();
+        updateSideBar();
         socket.emit('userMove', {x: x, y: y});
     }
     socket.on('userMoved', (info) => {
         localUserList[info.id].position = info.position;
+        updateSideBar();
         drawBoard();
     });
 </script>
