@@ -1,13 +1,14 @@
 require('./Constants.js');
+let Player = require('./Player.js');
 let World = require('./World.js');
 
 let app = require('express')();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
 
-app.get('/', function(req, res){
-    res.sendFile(__dirname + '/index.html');
-});
+app.get('/', (req, res) => {res.sendFile(__dirname + '/index.html');});
+app.get('/draws.js', (req, res) => {res.sendFile(__dirname + '/draws.js');});
+app.get('/Constants.js', (req, res) => {res.sendFile(__dirname + '/Constants.js');});
 
 players = {};
 world = undefined;
@@ -17,14 +18,6 @@ world = undefined;
  * players in own lookup table
  *
  */
-
-class Player {
-    position;
-
-    constructor () {
-        this.position = world.getNewPlayerPosition();
-    }
-}
 
 function getNewPlayerId() {
     let id;
@@ -40,6 +33,7 @@ function run() {
     world = new World(100, 100);
 
     world.addEntity(Entities.ENTITY_WALL, {x: 20, y: 20}, {orientation: Entities.ORIENTATION_VERTICAL, length: 20});
+    world.addEntity(Entities.ENTITY_WALL, {x: 40, y: 40}, {orientation: Entities.ORIENTATION_HORIZONTAL, length: 40});
     //{type: type, position: position, length: other.length, orientation: other.orientation}
 
     io.on('connection', function (socket) {
@@ -54,13 +48,15 @@ function run() {
         socket.emit('worldInfo', {width: world.width, height: world.height, time: world.time});
         io.emit('userList', players);
 
-        socket.on('userMove', (newPosition) => {
-            players[playerId].position.set(newPosition.x, newPosition.y);
-            socket.broadcast.emit('userMoved', {id: playerId, position: players[playerId].position});
+        socket.on('userMove', (newPosition) => {console.log('yomo ' + JSON.stringify(players[playerId]));
+            let moveStatus = players[playerId].move(world, newPosition);
+            // players[playerId].position.set(newPosition.x, newPosition.y); the old way
+            console.log(moveStatus);
+            if (moveStatus === OK || moveStatus === ERR_SUCCEEDED) socket.broadcast.emit('userMoved', {id: playerId, position: players[playerId].position});
+            else socket.emit('userMoved', {id: playerId, position: players[playerId].position});
         });
 
         socket.on('getUserList', () => socket.emit('userList', players));
-        socket.on('getEntities', () => socket.emit('entities', world.entities));
         socket.on('disconnect', function () {
             io.emit('userDisconnected', playerId);
             world.disconnectedPlayer(socket.id);

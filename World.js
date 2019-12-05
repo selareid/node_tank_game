@@ -1,3 +1,5 @@
+let Player = require('./Player.js');
+
 class World {
     width;
     height;
@@ -101,18 +103,25 @@ class Velocity {
     }
 }
 
-let WorldPlayer = { //gets called by function in Player class
-    ACTION_SHOOT: 'shoot',
-    ACTION_MOVE: 'move',
+Player.prototype.move = function(world, newPosition) { //TODO make move (max anyway) per second not per tick - have them move the amount allowed if they're over the max
+    if (!newPosition || newPosition.x === null || newPosition.x === undefined || isNaN(newPosition.x) || newPosition.y === null || newPosition.y === undefined || isNaN(newPosition.y)) return ERR_INVALID_ARGUMENTS;
+    console.log('this = ' + JSON.stringify(this));
+    //check move ok
+    if (Math.abs(newPosition.x) > world.width / 2 || Math.abs(newPosition.y) > world.height / 2) return ERR_ILLEGAL; //check in world bounds
+    if (Math.abs(newPosition.x - this.position.x) > MOVE_MAX_DISTANCE || Math.abs(newPosition.y - this.position.y) > MOVE_MAX_DISTANCE) return ERR_ILLEGAL; //check over max move allowed
 
-    shoot() {
-        //user lerp line function from line drawing tutorial to get velocity amount
-
-    },
-
-    move() {
-
-    }
+    this.position = {x: newPosition.x, y: newPosition.y};
+    return OK; //ran successfully
 };
+
+//TODO
+// Player.prototype.world = { //gets called by function in Player class
+//     shoot(world) {
+//         //user lerp line function from line drawing tutorial to get velocity amount
+//         //TODO spawn a bullet entity or someting'
+//     },
+//
+//
+// };
 
 module.exports = World;

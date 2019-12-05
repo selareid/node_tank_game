@@ -5,6 +5,8 @@
     <title>Tank Game</title>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="/Constants.js"></script>
+    <script src="/draws.js"></script>
     <script>
         var socket = io();
         let userId;
@@ -35,7 +37,7 @@
 
     //padding around grid
     let p = 15;
- 
+
     //size of canvas
     let cw = bw*5 + (p * 2) + 1;
     let ch = bh*5 + (p * 2) + 1;
@@ -44,51 +46,8 @@
 
     let worldInfo;
     let localUserList = {};
+    let localGameStateLatest = {};
     let topLeftPos = {x: 0, y: 0};
-
-    function updateSideBar() {
-        //draw user at top
-        $('#userListP').html(`${userId}: <br>&emsp; position: {x: ${localUserList[userId].position.x}, y: ${localUserList[userId].position.y}}`);
-
-        //draw other users
-        for (let uId in localUserList) {
-            if (uId == userId) continue;
-            $('#userListP').append(`<br>${uId}: <br>&emsp; position: {x: ${localUserList[uId].position.x}, y: ${localUserList[uId].position.y}}`);
-        }
-    }
-
-    function drawBoard() {
-        context.clearRect(0, 0, cw, ch); //clears the canvas
-
-        //draw grid start
-        for (var x = 0; x <= bw; x += 10) {
-            context.moveTo(0.5 + x*5 + p, p);
-            context.lineTo(0.5 + x*5 + p, bh*5 + p);
-            context.font = '10px sans-serif';
-            context.fillStyle = 'green';
-            context.fillText(Math.floor(topLeftPos.x+x), -5 + x*5 + p, p);
-        }
-
-        for (var x = 0; x <= bh; x += 10) {
-            context.moveTo(p, 0.5 + x*5 + p);
-            context.lineTo(bw*5 + p, 0.5 + x*5 + p);
-            context.font = '10px sans-serif';
-            context.fillStyle = 'green';
-            context.fillText(Math.floor(topLeftPos.y+x), 0, +5 + x*5 + p)
-        }
-        context.strokeStyle = "black";
-        context.stroke();
-        //draw grid end
-
-        //draw players start
-        for (let uId in localUserList) {
-            let u = localUserList[uId];
-
-            context.fillStyle = userId == uId ? 'rgba(0,255,0,0.75)' : 'rgba(64,64,285,0.75)';
-            context.fillRect(p+u.position.x*5-20-topLeftPos.x*5, p+u.position.y*5-20-topLeftPos.y*5, 40, 40);
-        }
-        //draw players end
-    }
 
     socket.on('worldInfo', function (worldInfo) {
         this.worldInfo = worldInfo;
@@ -123,15 +82,14 @@
             updateSideBar();
         });
 
-        socket.emit('getEntities');
-        socket.on('entities', function (entities) {
-            console.log(entities);
-        });
-
         socket.on('gameState', function (data) {
             $('#time').text(data.time);
             console.log('REMINDER: do things game simulation');
-        }); //TODO TODO
+            // console.log(data.entities);
+            localGameStateLatest = data;
+            drawBoard(); //draw play field again, don't need to do sidebar cause players not updates
+            //TODO maybe update sidebar once added player things
+        }); //TODO TODO entities n things
     });
 
     socket.on('userDisconnected', function (disconnectedId) {
