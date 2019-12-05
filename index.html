@@ -115,6 +115,8 @@
         localUserList[info.id].position = info.position;
         updateSideBar();
         drawBoard();
+
+        if (info.id === userId) center();
     });
 </script>
 </html>

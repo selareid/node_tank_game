@@ -18,7 +18,14 @@ function drawBoard() {
     for (let x = 0; x <= bw; x += 10) {
         context.beginPath();
 
-        context.strokeStyle = !worldInfo || x+topLeftPos.x < worldInfo.width/2 ? 'black' : 'red';
+        if (!worldInfo || Math.abs(x+topLeftPos.x) < worldInfo.width/2) {
+            context.strokeStyle = 'black';
+            context.lineWidth = 1;
+        }
+        else {
+            context.strokeStyle = 'red';
+            context.lineWidth = 5;
+        }
 
         context.moveTo(0.5 + x*5 + p, p);
         context.lineTo(0.5 + x*5 + p, bh*5 + p);
@@ -33,7 +40,14 @@ function drawBoard() {
     for (let y = 0; y <= bh; y += 10) {
         context.beginPath();
 
-        context.strokeStyle = !worldInfo || y+topLeftPos.y < worldInfo.width/2 ? 'black' : 'red';
+        if (!worldInfo || Math.abs(y+topLeftPos.y) < worldInfo.width/2) {
+            context.strokeStyle = 'black';
+            context.lineWidth = 1;
+        }
+        else {
+            context.strokeStyle = 'red';
+            context.lineWidth = 5;
+        }
 
         context.moveTo(p, 0.5 + y*5 + p);
         context.lineTo(bw*5 + p, 0.5 + y*5 + p);
