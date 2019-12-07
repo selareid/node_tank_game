@@ -21,7 +21,7 @@ function drawBoard() {
         if (!worldInfo || Math.abs(x+topLeftPos.x) < worldInfo.width/2) {
             context.strokeStyle = 'black';
             context.lineWidth = 1;
-            continue;
+            // continue;
         }
         else {
             context.strokeStyle = 'red';
@@ -44,7 +44,7 @@ function drawBoard() {
         if (!worldInfo || Math.abs(y+topLeftPos.y) < worldInfo.width/2) {
             context.strokeStyle = 'black';
             context.lineWidth = 1;
-            continue;
+            // continue;
         }
         else {
             context.strokeStyle = 'red';
@@ -71,8 +71,8 @@ function drawBoard() {
             switch (entity.type) {
                 case Constants.ENTITY_WALL:
                     context.fillStyle = 'rgba(60,60,60,0.85)';
-                    context.fillRect(p+entity.position.x*5-topLeftPos.x*5, p+entity.position.y*5-topLeftPos.y*5,
-                        entity.orientation === Constants.ORIENTATION_HORIZONTAL ? 10*5 : entity.length*5, entity.orientation === Constants.ORIENTATION_HORIZONTAL ? entity.length*5 : 10*5);
+                    context.fillRect(p+(entity.position.x)*5-topLeftPos.x*5, p+entity.position.y*5-topLeftPos.y*5,
+                        entity.orientation === Constants.ORIENTATION_VERTICAL ? Constants.WALL_WIDTH*5 : entity.length*5, entity.orientation === Constants.ORIENTATION_VERTICAL ? entity.length*5 : Constants.WALL_WIDTH*5);
                     break;
             }
         }

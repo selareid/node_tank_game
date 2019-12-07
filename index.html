@@ -139,7 +139,31 @@
     });
 
 
+    function checkMoveCollision(x, y) {
+        for (let entityId in localGameStateLatest.entities) {
+            let entity = localGameStateLatest.entities[entityId];
+            if (entity.type === Constants.ENTITY_WALL) {
+                /*TODO TODO TODo
+                * Get the 4 lines of the rectangle
+                * check intersection with any of the player's bounding lines (4 cause they square)
+                */
+                // if (
+                //     (entity.orientation === Constants.ORIENTATION_HORIZONTAL
+                //     && Math.abs(localUserList[userId].position.x+x-entity.position.x) < entity.length
+                //     )
+                //
+                //     /*|| (entity.orientation === Constants.ORIENTATION_VERTICAL && Math.abs(localUserList[userId].position.y+y-entity.position.y) > entity.length)*/ ) {
+                //     return false;
+                // }
+            }
+        }
+
+        return true;
+    } //TODO TODO TODO
+
     function move(x, y) {
+        if (!checkMoveCollision(x, y)) return;
+
         localUserList[userId].position = {x: localUserList[userId].position.x + x, y: localUserList[userId].position.y + y};
         console.log(localUserList[userId].position);
         drawBoard();

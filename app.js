@@ -32,8 +32,8 @@ function getNewPlayerId() {
 function run() {
     world = new World(100, 100);
 
-    world.addEntity(Constants.ENTITY_WALL, {x: 20, y: 20}, {orientation: Constants.ORIENTATION_VERTICAL, length: 20});
-    world.addEntity(Constants.ENTITY_WALL, {x: 40, y: 40}, {orientation: Constants.ORIENTATION_HORIZONTAL, length: 40});
+    world.addEntity(Constants.ENTITY_WALL, {x: 0, y: 20}, {orientation: Constants.ORIENTATION_VERTICAL, length: 20});
+    world.addEntity(Constants.ENTITY_WALL, {x: 20, y: 40}, {orientation: Constants.ORIENTATION_HORIZONTAL, length: 40});
     //{type: type, position: position, length: other.length, orientation: other.orientation}
 
     io.on('connection', function (socket) {
