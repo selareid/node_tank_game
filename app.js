@@ -49,10 +49,19 @@ function run() {
         io.emit('userList', players);
 
         socket.on('userMove', (newPosition) => {
-            let moveStatus = players[playerId].move(world, newPosition);
-            // players[playerId].position.set(newPosition.x, newPosition.y); the old way
-            if (moveStatus === Constants.OK || moveStatus === Constants.ERR_SUCCEEDED) socket.broadcast.emit('userMoved', {id: playerId, position: players[playerId].position});
-            else socket.emit('userMoved', {id: playerId, position: players[playerId].position});
+                let moveStatus = players[playerId].move(world, newPosition);
+                // players[playerId].position.set(newPosition.x, newPosition.y); the old way
+                if (moveStatus === Constants.OK || moveStatus === Constants.ERR_SUCCEEDED) {
+                    socket.broadcast.emit('userMoved', {
+                        id: playerId,
+                        position: players[playerId].position
+                    });
+                }
+                else {
+                    setTimeout(() => { //LAG 4 TESTING
+                    socket.emit('userMoved', {id: playerId, position: players[playerId].position});
+                    }, 500*Math.random()+120); //LAG 4 TESTING
+                }
         });
 
         socket.on('getUserList', () => socket.emit('userList', players));
@@ -71,14 +80,26 @@ function run() {
 
     //loop start (TODO)
     setInterval(() => {
-        world.simulate(); //TODO simulate world
-        io.emit('gameState', world.getGameState()); //send game state to users
-    }, 1000);
+        loop();
+    }, Math.floor(1000/60));
     //loop end
 }
 
-run();
+let lastTickStart;
+let timeSinceLastTick;
+
+function loop() {
+    if (lastTickStart) timeSinceLastTick = new Date() - lastTickStart;
+    lastTickStart = new Date();
+
+    console.log(timeSinceLastTick);
+
+    world.simulate(); //TODO simulate world
+    io.emit('gameState', world.getGameState()); //send game state to users
+}
 
 http.listen(3000, function(){
     console.log('listening on *:3000');
 });
+
+run();

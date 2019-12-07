@@ -21,6 +21,7 @@ function drawBoard() {
         if (!worldInfo || Math.abs(x+topLeftPos.x) < worldInfo.width/2) {
             context.strokeStyle = 'black';
             context.lineWidth = 1;
+            continue;
         }
         else {
             context.strokeStyle = 'red';
@@ -43,6 +44,7 @@ function drawBoard() {
         if (!worldInfo || Math.abs(y+topLeftPos.y) < worldInfo.width/2) {
             context.strokeStyle = 'black';
             context.lineWidth = 1;
+            continue;
         }
         else {
             context.strokeStyle = 'red';

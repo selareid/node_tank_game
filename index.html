@@ -48,6 +48,7 @@
     let localUserList = {};
     let localGameStateLatest = {};
     let topLeftPos = {x: 0, y: 0};
+    let keysDown = {};
 
     socket.on('worldInfo', function (givenWorldInfo) {
         worldInfo = givenWorldInfo;
@@ -56,6 +57,7 @@
 
         let mouseButtonDown = false;
 
+        //attach mouse events start
         document.getElementById('mainCanvas').addEventListener('mousedown', function (event) {
             if (event.button === 0) mouseButtonDown = true;
         });
@@ -70,6 +72,19 @@
             topLeftPos.y -= Math.floor(event.movementY*1000/5)/1000;
             drawBoard();
         });
+        //attach mouse events end
+
+        //attach key press event
+        document.addEventListener("keydown", event => {
+            if (event.isComposing || event.keyCode === 229) return; //from example code - idk
+            if (event.keyCode === 87 || event.keyCode === 83 || event.keyCode ===  68 || event.keyCode ===  65) keysDown[event.keyCode] = true;
+        });
+
+        document.addEventListener("keyup", event => {
+            if (event.isComposing || event.keyCode === 229) return; //from example code - idk
+            if (event.keyCode === 87 || event.keyCode === 83 || event.keyCode ===  68 || event.keyCode ===  65) keysDown[event.keyCode] = false; //TODO maybe cause memory leak ;)
+        });
+
 
         socket.emit('getUserList');
         socket.on('userList', function (ul) {
@@ -86,10 +101,32 @@
         });
 
         socket.on('gameState', function (data) {
-            $('#time').text(data.time);
+            //do key things
+            for (let keyCode in keysDown) {
+                if (!keysDown[keyCode]) continue;
+
+                switch(parseInt(keyCode)) { //deprecated, yet supported
+                    case 87: //w
+                        move(0, -1); // up
+                        break;
+                    case 83: //s
+                        move(0, 1); // down
+                        break;
+                    case 68: //d
+                        move(1, 0); // right
+                        break;
+                    case 65: //a
+                        move(-1, 0); // left
+                        break;
+                }
+            }
+
             console.log('REMINDER: do things game simulation');
             // console.log(data.entities);
             localGameStateLatest = data;
+
+            //draw things last
+            $('#time').text(data.time);
             drawBoard(); //draw play field again, don't need to do sidebar cause players not updates
             //TODO maybe update sidebar once added player things
         }); //TODO TODO entities n things
@@ -103,7 +140,7 @@
 
 
     function move(x, y) {
-        localUserList[userId].position = {x: localUserList[userId].position.x+x, y: localUserList[userId].position.y+y};
+        localUserList[userId].position = {x: localUserList[userId].position.x + x, y: localUserList[userId].position.y + y};
         console.log(localUserList[userId].position);
         drawBoard();
         updateSideBar();

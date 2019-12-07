@@ -1,4 +1,5 @@
 Constants = {
+    MIN_TICK_SPEED: 100,
     ENTITY_WALL: 'wall',
     ENTITY_BULLET: 'bullet',
     ORIENTATION_VERTICAL: 0,
