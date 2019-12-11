@@ -7,11 +7,21 @@ Constants = {
     ORIENTATION_VERTICAL: 0,
     ORIENTATION_HORIZONTAL: 1,
 
+    BOUNCE_NO: 0,
+    BOUNCE_HORIZONTAL: 1,
+    BOUNCE_VERTICAL: 2,
+    BOUNCE_BOTH: 3,
+
+    COLLIDING_HORIZONTAL_SIDE: 1,
+    COLLIDING_VERTICAL_SIDE: 2,
+
     ACTION_SHOOT: 'shoot',
     ACTION_MOVE: 'move',
 
+    PLAYER_SIZE: 8,
     MOVE_MAX_DISTANCE: 10,
     WALL_WIDTH: 10,
+    BULLET_SIZE: 5,
 
     OK: 0,
     ERR_SUCCEEDED: 1, //it be like that sometimes

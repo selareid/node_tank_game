@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tank Game</title>
+    <title>Multiplayer Thingy</title>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="/Constants.js"></script>
     <script src="/draws.js"></script>
+    <script src="/collisions.js"></script>
     <script>
         var socket = io();
         let userId;
@@ -23,8 +24,8 @@
         });
     </script>
 </head>
-<body>
-    <div id="playArea" style="float: left;"></div>
+<body style="background-color: #ffffff">
+    <div id="playArea" style="background-color: #f8f8f8; float: left;"></div>
     <div id="sideBar" style="float: left; width:max-content; height: auto; padding-left: 25px;">
         <p id="time">____</p>
         <p id="userListP"></p>
@@ -43,6 +44,10 @@
     let ch = bh*5 + (p * 2) + 1;
     let canvas = $('<canvas/>').attr({id: "mainCanvas", width: cw, height: ch}).appendTo($('#playArea'));
     let context = canvas.get(0).getContext("2d");
+
+    let options = {
+        track: true
+    };
 
     let worldInfo;
     let localUserList = {};
@@ -121,7 +126,7 @@
                 }
             }
 
-            console.log('REMINDER: do things game simulation');
+            // console.log('REMINDER: do things game simulation');
             // console.log(data.entities);
             localGameStateLatest = data;
 
@@ -138,38 +143,27 @@
         updateSideBar();
     });
 
-
-    function checkMoveCollision(x, y) {
-        for (let entityId in localGameStateLatest.entities) {
-            let entity = localGameStateLatest.entities[entityId];
-            if (entity.type === Constants.ENTITY_WALL) {
-                /*TODO TODO TODo
-                * Get the 4 lines of the rectangle
-                * check intersection with any of the player's bounding lines (4 cause they square)
-                */
-                // if (
-                //     (entity.orientation === Constants.ORIENTATION_HORIZONTAL
-                //     && Math.abs(localUserList[userId].position.x+x-entity.position.x) < entity.length
-                //     )
-                //
-                //     /*|| (entity.orientation === Constants.ORIENTATION_VERTICAL && Math.abs(localUserList[userId].position.y+y-entity.position.y) > entity.length)*/ ) {
-                //     return false;
-                // }
-            }
+    function move(x, y) {
+        if (moveCollidingWithEntity(x, y) //entity collision checks
+        || (Math.abs(localUserList[userId].position.x + x) + Constants.PLAYER_SIZE / 2 > worldInfo.width / 2 //world edge collision checks
+                || Math.abs(localUserList[userId].position.y + y) + Constants.PLAYER_SIZE / 2 > worldInfo.height / 2)) {
+            if (Math.abs(x) >= 1 || Math.abs(y) >= 1) move(x === 0 ? 0 : (x > 0 ? 0.1 : -0.1), y === 0 ? 0 : (y > 0 ? 0.1 : -0.1)); //retry with smaller to get as close as allowed (not stuck 0.9 away cause move is 1)
+            return;
         }
 
-        return true;
-    } //TODO TODO TODO
+        localUserList[userId].position = {
+            x: localUserList[userId].position.x + x,
+            y: localUserList[userId].position.y + y
+        };
 
-    function move(x, y) {
-        if (!checkMoveCollision(x, y)) return;
+        //round to 2 decimal places
+        localUserList[userId].position.x = Math.round(localUserList[userId].position.x * 100) / 100;
+        localUserList[userId].position.y = Math.round(localUserList[userId].position.y * 100) / 100;
 
-        localUserList[userId].position = {x: localUserList[userId].position.x + x, y: localUserList[userId].position.y + y};
-        console.log(localUserList[userId].position);
         drawBoard();
         updateSideBar();
         socket.emit('userMove', localUserList[userId].position);
-        center();
+        if (options.track) center();
     }
 
     socket.on('userMoved', (info) => {
@@ -177,7 +171,7 @@
         updateSideBar();
         drawBoard();
 
-        if (info.id === userId) center();
+        if (options.track && info.id === userId) center();
     });
 </script>
 </html>

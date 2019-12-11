@@ -1,13 +1,14 @@
 require('./Constants.js');
 let Player = require('./Player.js');
-let World = require('./World.js');
+let {World, Position, Velocity} = require('./World.js');
 
 let app = require('express')();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
 
-app.get('/', (req, res) => {res.sendFile(__dirname + '/index.html');});
-app.get('/draws.js', (req, res) => {res.sendFile(__dirname + '/draws.js');});
+app.get('/', (req, res) => {res.sendFile(__dirname + '/client/index.html');});
+app.get('/draws.js', (req, res) => {res.sendFile(__dirname + '/client/draws.js');});
+app.get('/collisions.js', (req, res) => {res.sendFile(__dirname + '/client/collisions.js');});
 app.get('/Constants.js', (req, res) => {res.sendFile(__dirname + '/Constants.js');});
 
 players = {};
@@ -32,8 +33,10 @@ function getNewPlayerId() {
 function run() {
     world = new World(100, 100);
 
-    world.addEntity(Constants.ENTITY_WALL, {x: 0, y: 20}, {orientation: Constants.ORIENTATION_VERTICAL, length: 20});
-    world.addEntity(Constants.ENTITY_WALL, {x: 20, y: 40}, {orientation: Constants.ORIENTATION_HORIZONTAL, length: 40});
+    world.addEntity(Constants.ENTITY_WALL, new Position(0,10), {orientation: Constants.ORIENTATION_VERTICAL, length: 20});
+    world.addEntity(Constants.ENTITY_WALL, new Position(-20, 35), {orientation: Constants.ORIENTATION_HORIZONTAL, length: 40});
+    world.addEntity(Constants.ENTITY_WALL, new Position(-40, 70), {orientation: Constants.ORIENTATION_HORIZONTAL, length: 40});
+    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(Math.random()*2-1, Math.random()*2-1)});
     //{type: type, position: position, length: other.length, orientation: other.orientation}
 
     io.on('connection', function (socket) {
@@ -58,9 +61,9 @@ function run() {
                     });
                 }
                 else {
-                    setTimeout(() => { //LAG 4 TESTING
+                    setTimeout(() => { //LAG 4 TESTING TODO
                     socket.emit('userMoved', {id: playerId, position: players[playerId].position});
-                    }, 500*Math.random()+120); //LAG 4 TESTING
+                    }, 500*Math.random()+120); //LAG 4 TESTING TODO
                 }
         });
 
@@ -92,7 +95,7 @@ function loop() {
     if (lastTickStart) timeSinceLastTick = new Date() - lastTickStart;
     lastTickStart = new Date();
 
-    console.log(timeSinceLastTick);
+    // console.log(timeSinceLastTick);
 
     world.simulate(); //TODO simulate world
     io.emit('gameState', world.getGameState()); //send game state to users

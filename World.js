@@ -1,4 +1,4 @@
-let Player = require('./Player.js');
+const collisions = require('./collisions.js');
 
 class World {
     width;
@@ -27,23 +27,50 @@ class World {
 
             switch (entity.type) {
                 case Constants.ENTITY_BULLET:
-                    if (Math.abs(entity.position.x) < this.width/2 && Math.abs(entity.position.y) < this.height) entity.position.transform(entity.velocity.x, entity.velocity.y);
+                    //horizontal world edges check
+                    if (Math.abs(entity.position.x + entity.velocity.x) + Constants.BULLET_SIZE > this.width/2
+                    ) entity.velocity.x = -entity.velocity.x; //reverse horizontal velocity (bounce)
+                    if(Math.abs(entity.position.y + entity.velocity.y) + Constants.BULLET_SIZE > this.height/2 //bottom
+                    ) entity.velocity.y = -entity.velocity.y; //bounce
+
+                    //check walls
+                    switch(collisions.checkBulletEntities(entity, this.entities)) {
+                        case Constants.BOUNCE_HORIZONTAL:
+                            entity.velocity.x = -entity.velocity.x;
+                            break;
+                        case Constants.BOUNCE_VERTICAL:
+                            entity.velocity.y = -entity.velocity.y;
+                            break;
+                        case Constants.BOUNCE_BOTH:
+                            entity.velocity.x = -entity.velocity.x;
+                            entity.velocity.y = -entity.velocity.y;
+                            break;
+                    }
+
+                    entity.position.transform(entity.velocity.x, entity.velocity.y);
                     break;
-                case Constants.ENTITY_WALL:
-                    break;
+                // walls are pretty static
+                // case Constants.ENTITY_WALL:
+                //     break;
             }
         }
     }
 
-    addEntity(type, position, other = {}) {
+    /**
+     *
+     * @param {string} type
+     * @param {Position|{x: number, y: number}} position
+     * @param {Object} [options={}]
+     */
+    addEntity(type, position, options = {}) {
         let entityId;
 
         do {
             entityId = Math.floor(Math.random() * 9999999);
         } while (this.entities[entityId] !== undefined && this.entities[entityId] !== null);
 
-        if (type === Constants.ENTITY_WALL) this.entities[entityId] = {type: type, position: position, length: other.length, orientation: other.orientation};
-        else this.entities[entityId] = {type: type, position: position, velocity: other.velocity};
+        if (type === Constants.ENTITY_WALL) this.entities[entityId] = {type: type, position: position, length: options.length, orientation: options.orientation};
+        else this.entities[entityId] = {type: type, position: position, velocity: options.velocity};
     }
 
     newConnectedPlayer(socketId, playerId) {
@@ -103,25 +130,4 @@ class Velocity {
     }
 }
 
-Player.prototype.move = function(world, newPosition) { //TODO make move (max anyway) per second not per tick - have them move the amount allowed if they're over the max
-    if (!newPosition || newPosition.x === null || newPosition.x === undefined || isNaN(newPosition.x) || newPosition.y === null || newPosition.y === undefined || isNaN(newPosition.y)) return Constants.ERR_INVALID_ARGUMENTS;
-
-    //check move ok
-    if (Math.abs(newPosition.x) > world.width / 2 || Math.abs(newPosition.y) > world.height / 2) return Constants.ERR_ILLEGAL; //check in world bounds
-    if (Math.abs(newPosition.x - this.position.x) > Constants.MOVE_MAX_DISTANCE || Math.abs(newPosition.y - this.position.y) > Constants.MOVE_MAX_DISTANCE) return Constants.ERR_ILLEGAL; //check over max move allowed
-
-    this.position = {x: newPosition.x, y: newPosition.y}; //move
-    return Constants.OK; //ran successfully
-};
-
-//TODO
-// Player.prototype.world = { //gets called by function in Player class
-//     shoot(world) {
-//         //user lerp line function from line drawing tutorial to get velocity amount
-//         //TODO spawn a bullet entity or someting'
-//     },
-//
-//
-// };
-
-module.exports = World;
+module.exports = {World, Position, Velocity};
