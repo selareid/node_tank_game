@@ -6,3 +6,6 @@
 0. For bullet it is center cause bullet is circle
 
 DON'T FORGET YOU HAVE FAKE LAG IN MOVEMENT SERVER-SIDE
+
+TODO change entities to a class
+and have bullets as a sub class

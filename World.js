@@ -34,17 +34,16 @@ class World {
                     ) entity.velocity.y = -entity.velocity.y; //bounce
 
                     //check walls
-                    switch(collisions.checkBulletEntities(entity, this.entities)) {
-                        case Constants.BOUNCE_HORIZONTAL:
-                            entity.velocity.x = -entity.velocity.x;
-                            break;
-                        case Constants.BOUNCE_VERTICAL:
-                            entity.velocity.y = -entity.velocity.y;
-                            break;
-                        case Constants.BOUNCE_BOTH:
-                            entity.velocity.x = -entity.velocity.x;
-                            entity.velocity.y = -entity.velocity.y;
-                            break;
+                    collisions.handleBulletWallCollision(entity, this.entities);
+
+                    //check players
+                    for (let playerId in players) {
+                        let player = players[playerId];
+                        if (Math.abs(player.position.x-entity.position.x) < (Constants.BULLET_SIZE+Constants.PLAYER_SIZE)/2
+                            && Math.abs(player.position.y-entity.position.y) < (Constants.BULLET_SIZE+Constants.PLAYER_SIZE)/2) {
+                            //TODO also kill the player, have dead variable that gets checked at end of the entity's run loop
+                            delete this.entities[entity_id];
+                        }
                     }
 
                     entity.position.transform(entity.velocity.x, entity.velocity.y);
@@ -70,7 +69,9 @@ class World {
         } while (this.entities[entityId] !== undefined && this.entities[entityId] !== null);
 
         if (type === Constants.ENTITY_WALL) this.entities[entityId] = {type: type, position: position, length: options.length, orientation: options.orientation};
-        else this.entities[entityId] = {type: type, position: position, velocity: options.velocity};
+        else {
+            this.entities[entityId] = {type: type, position: position, birthTime: world.time, velocity: options.velocity};
+        }
     }
 
     newConnectedPlayer(socketId, playerId) {

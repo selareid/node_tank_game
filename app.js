@@ -33,10 +33,19 @@ function getNewPlayerId() {
 function run() {
     world = new World(100, 100);
 
-    world.addEntity(Constants.ENTITY_WALL, new Position(0,10), {orientation: Constants.ORIENTATION_VERTICAL, length: 20});
+    world.addEntity(Constants.ENTITY_WALL, new Position(0,0), {orientation: Constants.ORIENTATION_VERTICAL, length: 20});
     world.addEntity(Constants.ENTITY_WALL, new Position(-20, 35), {orientation: Constants.ORIENTATION_HORIZONTAL, length: 40});
     world.addEntity(Constants.ENTITY_WALL, new Position(-40, 70), {orientation: Constants.ORIENTATION_HORIZONTAL, length: 40});
-    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(Math.random()*2-1, Math.random()*2-1)});
+
+    let newBulletAngle = Math.floor(Math.random()*360);
+    console.log(newBulletAngle);
+    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.1*Math.cos(newBulletAngle), 0.1*-Math.sin(newBulletAngle))});
+    newBulletAngle = Math.floor(Math.random()*360);
+    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.1*Math.cos(newBulletAngle), 0.1*-Math.sin(newBulletAngle))});
+    newBulletAngle = Math.floor(Math.random()*360);
+    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.1*Math.cos(newBulletAngle), 0.1*-Math.sin(newBulletAngle))});
+    newBulletAngle = Math.floor(Math.random()*360);
+    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.1*Math.cos(newBulletAngle), 0.1*-Math.sin(newBulletAngle))});
     //{type: type, position: position, length: other.length, orientation: other.orientation}
 
     io.on('connection', function (socket) {

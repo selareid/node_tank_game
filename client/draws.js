@@ -88,27 +88,27 @@ function drawBoard() {
 
     //draw entities start
     if (localGameStateLatest.entities) {
-        context.beginPath();
-
         for (let entityId in localGameStateLatest.entities) {
             let entity = localGameStateLatest.entities[entityId];
 
             switch (entity.type) {
                 case Constants.ENTITY_WALL:
+                    context.beginPath();
                     context.fillStyle = 'rgba(60,60,60,0.85)';
                     context.fillRect(p + (entity.position.x) * 5 - topLeftPos.x * 5, p + entity.position.y * 5 - topLeftPos.y * 5,
                         entity.orientation === Constants.ORIENTATION_VERTICAL ? Constants.WALL_WIDTH * 5 : entity.length * 5, entity.orientation === Constants.ORIENTATION_VERTICAL ? entity.length * 5 : Constants.WALL_WIDTH * 5);
+                    context.stroke();
                     break;
                 case Constants.ENTITY_BULLET:
+                    context.beginPath();
                     context.fillStyle = 'rgba(0,0,0,0.85)';
-                    context.arc(p + (entity.position.x) * 5 - topLeftPos.x * 5, p + entity.position.y * 5 - topLeftPos.y * 5, Constants.BULLET_SIZE*5, 0, 2 * Math.PI);
+                    context.arc(p + (entity.position.x) * 5 - topLeftPos.x * 5, p + entity.position.y * 5 - topLeftPos.y * 5, Constants.BULLET_SIZE / 2 * 5, 0, 2 * Math.PI);
                     context.moveTo(p + (entity.position.x) * 5 - topLeftPos.x * 5, p + entity.position.y * 5 - topLeftPos.y * 5);
-                    context.lineTo(p + (entity.position.x) * 5 - topLeftPos.x * 5 + entity.velocity.x*Constants.BULLET_SIZE*5, p + entity.position.y * 5 - topLeftPos.y * 5 + entity.velocity.y*Constants.BULLET_SIZE*5);
+                    context.lineTo(p + (entity.position.x) * 5 - topLeftPos.x * 5 + entity.velocity.x * Constants.BULLET_SIZE * 5, p + entity.position.y * 5 - topLeftPos.y * 5 + entity.velocity.y * Constants.BULLET_SIZE * 5);
+                    context.stroke();
                     break;
             }
         }
-
-        context.stroke();
     }
     //draw entities end
 
