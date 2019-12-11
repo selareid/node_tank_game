@@ -42,12 +42,16 @@ class World {
                         let player = players[playerId];
                         if (Math.abs(player.position.x-entity.position.x) < (Constants.BULLET_SIZE+Constants.PLAYER_SIZE)/2
                             && Math.abs(player.position.y-entity.position.y) < (Constants.BULLET_SIZE+Constants.PLAYER_SIZE)/2) {
-                            //TODO also kill the player, have dead variable that gets checked at end of the entity's run loop
-                            delete this.entities[entity_id];
+
+                            player.dead = true;
+                            entity.dead = true;
                         }
                     }
 
                     entity.position.transform(entity.velocity.x, entity.velocity.y);
+
+                    if (entity.dead) delete this.entities[entity_id];
+
                     break;
                 // walls are pretty static
                 // case Constants.ENTITY_WALL:

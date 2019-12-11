@@ -2,9 +2,18 @@ const collisions = require('./collisions.js');
 
 class Player {
     position;
+    dead = false;
 
     constructor () {
         this.position = world.getNewPlayerPosition();
+    }
+
+    die () {
+        this.shindei(); //TODO
+    }
+
+    shindei () { //die
+        this.dead = true; //TODO
     }
 }
 

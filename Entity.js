@@ -23,6 +23,7 @@ class Wall extends Entity {
 class Bullet extends Entity {
     birthTime;
     velocity;
+    dead = false;
 
     constructor(position, velocity) {
         super(position, Constants.ENTITY_BULLET);

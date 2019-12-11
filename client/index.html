@@ -33,15 +33,21 @@
 </body>
 <script>
     //grid width and height
-    let bw = 100;
-    let bh = 100;
+    // let bw = 200;
+    // let bh = 200;
 
     //padding around grid
     let p = 15;
 
     //size of canvas
-    let cw = bw*5 + (p * 2) + 1;
-    let ch = bh*5 + (p * 2) + 1;
+    // let cw = bw*5 + (p * 2) + 1;
+    // let ch = bh*5 + (p * 2) + 1;
+    let cw = window.innerWidth*0.75;
+    let ch = window.innerHeight;
+
+    let bw = cw / 5 - (p * 2) - 1;
+    let bh = ch / 5 - (p * 2) - 1;
+
     let canvas = $('<canvas/>').attr({id: "mainCanvas", width: cw, height: ch}).appendTo($('#playArea'));
     let context = canvas.get(0).getContext("2d");
 
