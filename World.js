@@ -1,4 +1,5 @@
 const collisions = require('./collisions.js');
+const {Entity, Wall, Bullet} = require('./Entity.js');
 
 class World {
     width;
@@ -68,9 +69,15 @@ class World {
             entityId = Math.floor(Math.random() * 9999999);
         } while (this.entities[entityId] !== undefined && this.entities[entityId] !== null);
 
-        if (type === Constants.ENTITY_WALL) this.entities[entityId] = {type: type, position: position, length: options.length, orientation: options.orientation};
-        else {
-            this.entities[entityId] = {type: type, position: position, birthTime: world.time, velocity: options.velocity};
+        switch (type) {
+            case Constants.ENTITY_WALL:
+                this.entities[entityId] = new Wall(position, options.orientation, options.length);
+                break;
+            case Constants.ENTITY_BULLET:
+                this.entities[entityId] = new Bullet(position, options.velocity);
+                break;
+            default:
+                throw Constants.ERR_INVALID_ARGUMENTS;
         }
     }
 

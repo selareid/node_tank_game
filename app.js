@@ -39,13 +39,13 @@ function run() {
 
     let newBulletAngle = Math.floor(Math.random()*360);
     console.log(newBulletAngle);
-    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.1*Math.cos(newBulletAngle), 0.1*-Math.sin(newBulletAngle))});
+    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.2*Math.cos(newBulletAngle), 0.2*-Math.sin(newBulletAngle))});
     newBulletAngle = Math.floor(Math.random()*360);
-    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.1*Math.cos(newBulletAngle), 0.1*-Math.sin(newBulletAngle))});
+    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.2*Math.cos(newBulletAngle), 0.2*-Math.sin(newBulletAngle))});
     newBulletAngle = Math.floor(Math.random()*360);
-    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.1*Math.cos(newBulletAngle), 0.1*-Math.sin(newBulletAngle))});
+    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.2*Math.cos(newBulletAngle), 0.2*-Math.sin(newBulletAngle))});
     newBulletAngle = Math.floor(Math.random()*360);
-    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.1*Math.cos(newBulletAngle), 0.1*-Math.sin(newBulletAngle))});
+    world.addEntity(Constants.ENTITY_BULLET, new Position(-3, -25), {velocity: new Velocity(0.2*Math.cos(newBulletAngle), 0.2*-Math.sin(newBulletAngle))});
     //{type: type, position: position, length: other.length, orientation: other.orientation}
 
     io.on('connection', function (socket) {
