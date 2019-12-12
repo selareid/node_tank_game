@@ -1,19 +1,20 @@
+const Saves = require('./Saves.js');
 const collisions = require('./collisions.js');
 
 class Player {
     position;
     dead = false;
 
-    constructor () {
-        this.position = world.getNewPlayerPosition();
+    constructor() {
+        this.position = Saves.World.getNewPlayerPosition();
     }
 
-    die () {
-        this.shindei(); //TODO
+    alive() {
+        return this.dead === true;
     }
 
-    shindei () { //die
-        this.dead = true; //TODO
+    die() {
+        this.dead = true;
     }
 }
 
@@ -21,7 +22,7 @@ Player.prototype.move = function(world, newPosition) { //TODO make move (max any
     if (!newPosition || newPosition.x === null || newPosition.x === undefined || isNaN(newPosition.x) || newPosition.y === null || newPosition.y === undefined || isNaN(newPosition.y)) return Constants.ERR_INVALID_ARGUMENTS;
 
     //check move ok
-    if (Math.abs(newPosition.x)+Constants.PLAYER_SIZE/2 > world.width / 2 || Math.abs(newPosition.y)+Constants.PLAYER_SIZE/2 > world.height / 2) return Constants.ERR_ILLEGAL; //check in world bounds
+    if (Math.abs(newPosition.x) + Constants.PLAYER_SIZE / 2 > world.width / 2 || Math.abs(newPosition.y) + Constants.PLAYER_SIZE / 2 > world.height / 2) return Constants.ERR_ILLEGAL; //check in world bounds
     if (Math.abs(newPosition.x - this.position.x) > Constants.MOVE_MAX_DISTANCE || Math.abs(newPosition.y - this.position.y) > Constants.MOVE_MAX_DISTANCE) return Constants.ERR_ILLEGAL; //check over max move allowed
 
     if (collisions.checkMoveEntities(this.position, newPosition, world.entities)) return Constants.ERR_ILLEGAL;

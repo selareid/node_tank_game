@@ -35,7 +35,7 @@ class World {
                     ) entity.velocity.y = -entity.velocity.y; //bounce
 
                     //check walls
-                    collisions.handleBulletWallCollision(entity, this.entities);
+                    collisions.handleBulletWallCollision(entity, this.entities, this.width, this.height);
 
                     //check players
                     for (let playerId in players) {
@@ -78,7 +78,7 @@ class World {
                 this.entities[entityId] = new Wall(position, options.orientation, options.length);
                 break;
             case Constants.ENTITY_BULLET:
-                this.entities[entityId] = new Bullet(position, options.velocity);
+                this.entities[entityId] = new Bullet(position, this.time, options.velocity);
                 break;
             default:
                 throw Constants.ERR_INVALID_ARGUMENTS;

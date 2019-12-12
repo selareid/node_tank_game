@@ -125,18 +125,17 @@ function checkPlayerMoveEntities(playerPosition, newPosition, entities) {
     return false;
 }
 
-function handleBulletWallCollision(bulletEntity, entities) {
+function handleBulletWallCollision(bulletEntity, entities, worldWidth, worldHeight) {
     for (let entityId in entities) {
         let entity = entities[entityId];
         if (entity.type === Constants.ENTITY_WALL) {
             /* TODO
              * it doesn't take into account the bullet's size
             */
-
-            let relativeX = Math.abs(((entity.position.x+world.width) + (entity.orientation === Constants.ORIENTATION_VERTICAL ? Constants.WALL_WIDTH : entity.length)/2) - (bulletEntity.position.x+world.width))
+            let relativeX = Math.abs(((entity.position.x+worldWidth) + (entity.orientation === Constants.ORIENTATION_VERTICAL ? Constants.WALL_WIDTH : entity.length)/2) - (bulletEntity.position.x+worldWidth))
                 / ((entity.orientation === Constants.ORIENTATION_VERTICAL ? Constants.WALL_WIDTH : entity.length)/2); // 0 - 1
 
-            let relativeY = Math.abs(((entity.position.y+world.height) + (entity.orientation === Constants.ORIENTATION_HORIZONTAL ? Constants.WALL_WIDTH : entity.length)/2) - (bulletEntity.position.y+world.height))
+            let relativeY = Math.abs(((entity.position.y+worldHeight) + (entity.orientation === Constants.ORIENTATION_HORIZONTAL ? Constants.WALL_WIDTH : entity.length)/2) - (bulletEntity.position.y+worldHeight))
                 / ((entity.orientation === Constants.ORIENTATION_HORIZONTAL ? Constants.WALL_WIDTH : entity.length)/2); // 0 - 1
 
             if (relativeX > 0 && relativeX < 1 && relativeY > 0 && relativeY < 1) { //colliding

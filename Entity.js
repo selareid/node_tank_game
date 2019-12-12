@@ -25,11 +25,11 @@ class Bullet extends Entity {
     velocity;
     dead = false;
 
-    constructor(position, velocity) {
+    constructor(position, birthTime, velocity) {
         super(position, Constants.ENTITY_BULLET);
 
         this.velocity = velocity;
-        this.birthTime = world.time;
+        this.birthTime = birthTime;
     }
 }
 
