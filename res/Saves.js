@@ -18,7 +18,9 @@ const Saves = {
             let newBulletAngle;
             for (let i = 0; i < 100; i++) {
                 newBulletAngle = Math.floor(Math.random() * 360);
-                theWorld.addEntity(Constants.ENTITY_BULLET, new Position(Math.floor(Math.random()*30)-15, Math.floor(Math.random()*30)-15), {velocity: new Velocity(0.2 * Math.cos(newBulletAngle), 0.2 * -Math.sin(newBulletAngle))});
+                let id = theWorld.addEntity(Constants.ENTITY_BULLET, new Position(Math.floor(Math.random() * theWorld.width - theWorld.width / 2), Math.floor(Math.random() * theWorld.height - theWorld.height / 2)),
+                    {velocity: new Velocity(Constants.BULLET_SPEED * Math.cos(newBulletAngle), Constants.BULLET_SPEED * -Math.sin(newBulletAngle))});
+                theWorld.entities[id].lifeCountdown += Math.floor(Math.random()*10000-5000);
             }
         }
 

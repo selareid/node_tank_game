@@ -1,5 +1,6 @@
 require('./Constants.js');
 const Saves = require('./Saves.js');
+const socketHandlinga = require('./socket.js');
 let app = require('express')();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
@@ -21,7 +22,7 @@ function run() {
     /*console.log(*/Saves.World;//);
     //TODO remove or move to Saves.js {type: type, position: position, length: other.length, orientation: other.orientation}
 
-    require('./socket.js').io(io); //enable to socket.io things
+   socketHandlinga.io(io); //enable to socket.io things
 
     /*
      * Game loop
@@ -37,7 +38,7 @@ function run() {
 }
 
 let lastTickStart;
-let timeSinceLastTick;
+timeSinceLastTick = 0;
 
 function loop() {
     if (lastTickStart) timeSinceLastTick = new Date() - lastTickStart;

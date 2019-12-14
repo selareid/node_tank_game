@@ -20,11 +20,12 @@ Constants = {
     ACTION_MOVE: 'move',
 
     PLAYER_SIZE: 8,
-    MOVE_MAX_DISTANCE: 10,
+    MOVE_MAX_DISTANCE: 20,
     WALL_WIDTH: 10,
 
     BULLET_SIZE: 2,
-    BULLET_SPEED: 0.2,
+    BULLET_SPEED: 1,
+    BULLET_LIFETIME: 50000, //in milliseconds
 
     OK: 0,
     ERR_SUCCEEDED: 1, //it be like that sometimes

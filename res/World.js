@@ -1,8 +1,6 @@
 const collisions = require('./collisions.js');
-const socketio = require('./socket.js');
 const {Entity, Bullet} = require('./Entity.js');
 const {Terrain, Wall} = require('./Terrain.js');
-
 
 class World {
     width;
@@ -35,22 +33,30 @@ class World {
             switch (entity.type) {
                 case Constants.ENTITY_BULLET:
                     //horizontal world edges check
-                    if (Math.abs(entity.position.x + entity.velocity.x) + Constants.BULLET_SIZE > this.width/2
+
+                    //check life time
+                    entity.lifeCountdown -= timeSinceLastTick;
+                    if (entity.lifeCountdown < 0) entity.dead = true;
+
+                    if (Math.abs(entity.position.x + entity.velocity.x) + Constants.BULLET_SIZE > this.width / 2
                     ) entity.velocity.x = -entity.velocity.x; //reverse horizontal velocity (bounce)
-                    if(Math.abs(entity.position.y + entity.velocity.y) + Constants.BULLET_SIZE > this.height/2 //bottom
+                    if (Math.abs(entity.position.y + entity.velocity.y) + Constants.BULLET_SIZE > this.height / 2 //bottom
                     ) entity.velocity.y = -entity.velocity.y; //bounce
 
                     //check walls
                     collisions.handleBulletWallCollision(entity, this.terrain, this.width, this.height);
 
-                    //check players
-                    for (let playerId in players) {
-                        let player = players[playerId];
-                        if (Math.abs(player.position.x-entity.position.x) < (Constants.BULLET_SIZE+Constants.PLAYER_SIZE)/2
-                            && Math.abs(player.position.y-entity.position.y) < (Constants.BULLET_SIZE+Constants.PLAYER_SIZE)/2) {
+                    if (!entity.dead) {
+                        //check players
+                        for (let playerId in players) {
+                            let player = players[playerId];
+                            if (player.alive()) continue;
 
-                            player.dead = true;
-                            entity.dead = true;
+                            if (Math.abs(player.position.x - entity.position.x) < (Constants.BULLET_SIZE + Constants.PLAYER_SIZE) / 2
+                                && Math.abs(player.position.y - entity.position.y) < (Constants.BULLET_SIZE + Constants.PLAYER_SIZE) / 2) {
+                                player.die();
+                                entity.dead = true;
+                            }
                         }
                     }
 
@@ -87,6 +93,8 @@ class World {
         }
 
         this.pushTerrain = true;
+
+        return terrainId;
     }
 
     /**
@@ -109,6 +117,8 @@ class World {
             default:
                 throw Constants.ERR_INVALID_ARGUMENTS;
         }
+
+        return entityId;
     }
 
     newConnectedPlayer(socketId, playerId) {

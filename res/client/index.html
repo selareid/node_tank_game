@@ -20,12 +20,12 @@
         socket.on('disconnect', function () {
             console.log('disconnected from server');
             document.body.innerHTML = "SERVER DISCONNECTED <br> ATTEMPTING RECONNECT";
-            window.location.reload();
+            setTimeout(() => window.location.reload(), 1000);
         });
     </script>
 </head>
 <body style="background-color: #ffffff">
-    <div id="playArea" style="background-color: #f8f8f8; float: left;"></div>
+    <div id="playArea" style="background-color: #d1d1d1; float: left;"></div>
     <div id="sideBar" style="float: left; width:max-content; height: auto; padding-left: 25px;">
         <p id="time">____</p>
         <p id="userListP"></p>
@@ -87,7 +87,7 @@
         });
         //attach mouse events end
 
-        //attach key press event
+        //attach key press events
         document.addEventListener("keydown", event => {
             if (event.isComposing || event.keyCode === 229) return; //from example code - idk
             if (event.keyCode === 87 || event.keyCode === 83 || event.keyCode ===  68 || event.keyCode ===  65) keysDown[event.keyCode] = true;
@@ -156,12 +156,21 @@
             drawBoard(); //draw play field again, don't need to do sidebar cause players not updates
             //TODO maybe update sidebar once added player things
         }); //TODO TODO entities n things
-    });
 
-    socket.on('userDisconnected', function (disconnectedId) {
-        delete localUserList[disconnectedId];
-        drawBoard();
-        updateSideBar();
+        socket.on('userDisconnected', function (disconnectedId) {
+            delete localUserList[disconnectedId];
+            drawBoard();
+            updateSideBar();
+        });
+
+        socket.on('playerDied', function (deadPlayerId) {
+            localUserList[deadPlayerId].dead = true;
+
+            if (userId == deadPlayerId) {
+                console.log('oh no I ded')
+            }
+            else console.log('player ded ' + deadPlayerId)
+        })
     });
 
     function move(x, y) {

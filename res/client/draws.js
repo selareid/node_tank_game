@@ -65,6 +65,7 @@ function drawBoard() {
 
     //draw world edge lines start
     context.beginPath();
+    context.strokeStyle = '#000';
     //top
     context.moveTo(p-topLeftPos.x*5-worldInfo.width*5/2, p-topLeftPos.y*5-worldInfo.height*5/2);
     context.lineTo(p-topLeftPos.x*5+worldInfo.width*5/2, p-topLeftPos.y*5-worldInfo.height*5/2);
@@ -129,7 +130,7 @@ function drawBoard() {
     for (let uId in localUserList) {
         let u = localUserList[uId];
 
-        context.fillStyle = userId == uId ? 'rgba(0,255,0,0.75)' : 'rgba(64,64,285,0.75)';
+        context.fillStyle = !u.dead ? userId == uId ? 'rgba(0,255,0,0.75)' : 'rgba(64,64,285,0.75)' : 'rgba(127,127,127,0.76)';
         context.fillRect(p+u.position.x*5-Constants.PLAYER_SIZE/2*5-topLeftPos.x*5, p+u.position.y*5-Constants.PLAYER_SIZE/2*5-topLeftPos.y*5, 40, 40);
     }
     //draw players end

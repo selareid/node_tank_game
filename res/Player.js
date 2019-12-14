@@ -1,11 +1,15 @@
 const Saves = require('./Saves.js');
 const collisions = require('./collisions.js');
+const socketHandling = require('./socket.js');
 
 class Player {
+    id;
     position;
     dead = false;
+    deathTick;
 
-    constructor() {
+    constructor(id) {
+        this.id = id;
         this.position = Saves.World.getNewPlayerPosition();
     }
 
@@ -15,6 +19,8 @@ class Player {
 
     die() {
         this.dead = true;
+        this.deathTick = Saves.World.time;
+        socketHandling.pushDeath(this.id);
     }
 }
 

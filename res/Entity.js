@@ -1,23 +1,25 @@
 class Entity {
+    birthTime;
     position;
     type;
+    velocity;
+    dead = false;
 
-    constructor(position, type) {
+    constructor(position, type, birthTime, velocity) {
         this.position = position;
         this.type = type;
+        this.birthTime = birthTime;
+        this.velocity = velocity;
     }
 }
 
 class Bullet extends Entity {
-    birthTime;
-    velocity;
-    dead = false;
+    lifeCountdown; //in milliseconds
 
     constructor(position, birthTime, velocity) {
-        super(position, Constants.ENTITY_BULLET);
+        super(position, Constants.ENTITY_BULLET, birthTime, velocity);
 
-        this.velocity = velocity;
-        this.birthTime = birthTime;
+        this.lifeCountdown = Constants.BULLET_LIFETIME;
     }
 }
 
