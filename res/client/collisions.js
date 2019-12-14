@@ -28,10 +28,10 @@ function intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
     return true;
 }
 
-function moveCollidingWithEntity(x, y) {
-    for (let entityId in localGameStateLatest.entities) {
-        let entity = localGameStateLatest.entities[entityId];
-        if (entity.type === Constants.ENTITY_WALL) {
+function moveCollidingWithTerrain(x, y) {
+    for (let terrainId in localGameStateLatest.terrain) {
+        let terrain = localGameStateLatest.terrain[terrainId];
+        if (terrain.type === Constants.TERRAIN_WALL) {
             //the wall .position is the top-left corner
 
             /* one line is the movement line
@@ -40,7 +40,7 @@ function moveCollidingWithEntity(x, y) {
              * Other line is edge of wall
              */
 
-            switch (entity.orientation) {
+            switch (terrain.orientation) {
                 case Constants.ORIENTATION_HORIZONTAL:
                     for (let pos of [
                         {
@@ -61,13 +61,13 @@ function moveCollidingWithEntity(x, y) {
                         }
                     ]) {
                         if (intersects(pos.x, pos.y, pos.x + x, pos.y + y,
-                            entity.position.x, entity.position.y, entity.position.x + entity.length, entity.position.y)
+                            terrain.position.x, terrain.position.y, terrain.position.x + terrain.length, terrain.position.y)
                             || intersects(pos.x, pos.y, pos.x + x, pos.y + y,
-                                entity.position.x, entity.position.y + Constants.WALL_WIDTH, entity.position.x + entity.length, entity.position.y + Constants.WALL_WIDTH)
+                                terrain.position.x, terrain.position.y + Constants.WALL_WIDTH, terrain.position.x + terrain.length, terrain.position.y + Constants.WALL_WIDTH)
                             || intersects(pos.x, pos.y, pos.x + x, pos.y + y,
-                                entity.position.x, entity.position.y, entity.position.x, entity.position.y + Constants.WALL_WIDTH)
+                                terrain.position.x, terrain.position.y, terrain.position.x, terrain.position.y + Constants.WALL_WIDTH)
                             || intersects(pos.x, pos.y, pos.x + x, pos.y + y,
-                                entity.position.x + entity.length, entity.position.y, entity.position.x + entity.length, entity.position.y + Constants.WALL_WIDTH)) {
+                                terrain.position.x + terrain.length, terrain.position.y, terrain.position.x + terrain.length, terrain.position.y + Constants.WALL_WIDTH)) {
                             return true;
                         }
                     }
@@ -92,13 +92,13 @@ function moveCollidingWithEntity(x, y) {
                         }
                     ]) {
                         if (intersects(pos.x, pos.y, pos.x + x, pos.y + y,
-                            entity.position.x, entity.position.y, entity.position.x, entity.position.y + entity.length)
+                            terrain.position.x, terrain.position.y, terrain.position.x, terrain.position.y + terrain.length)
                             || intersects(pos.x, pos.y, pos.x + x, pos.y + y,
-                                entity.position.x + Constants.WALL_WIDTH, entity.position.y, entity.position.x + Constants.WALL_WIDTH, entity.position.y + entity.length)
+                                terrain.position.x + Constants.WALL_WIDTH, terrain.position.y, terrain.position.x + Constants.WALL_WIDTH, terrain.position.y + terrain.length)
                             || intersects(pos.x, pos.y, pos.x + x, pos.y + y,
-                                entity.position.x, entity.position.y, entity.position.x + Constants.WALL_WIDTH, entity.position.y)
+                                terrain.position.x, terrain.position.y, terrain.position.x + Constants.WALL_WIDTH, terrain.position.y)
                             || intersects(pos.x, pos.y, pos.x + x, pos.y + y,
-                                entity.position.x, entity.position.y + entity.length, entity.position.x + Constants.WALL_WIDTH, entity.position.y + entity.length)) {
+                                terrain.position.x, terrain.position.y + terrain.length, terrain.position.x + Constants.WALL_WIDTH, terrain.position.y + terrain.length)) {
                             return true;
                         }
                     }

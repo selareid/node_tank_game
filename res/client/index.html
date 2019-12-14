@@ -43,7 +43,7 @@
     // let cw = bw*5 + (p * 2) + 1;
     // let ch = bh*5 + (p * 2) + 1;
     let cw = window.innerWidth*0.75;
-    let ch = window.innerHeight;
+    let ch = window.innerHeight*0.9;
 
     let bw = cw / 5 - (p * 2) - 1;
     let bh = ch / 5 - (p * 2) - 1;
@@ -62,7 +62,9 @@
     let keysDown = {};
 
     socket.on('worldInfo', function (givenWorldInfo) {
+        localGameStateLatest.terrain = givenWorldInfo.terrain;
         worldInfo = givenWorldInfo;
+        delete worldInfo.terrain;
 
         drawBoard();
 
@@ -111,7 +113,17 @@
             updateSideBar();
         });
 
+        socket.on('terrain', function (terrainData) {
+            localGameStateLatest.terrain = terrainData;
+        });
+
+        let lastTickStart;
+        let timeSinceLastTick;
+
         socket.on('gameState', function (data) {
+            if (lastTickStart) timeSinceLastTick = new Date() - lastTickStart;
+            lastTickStart = new Date();
+
             //do key things
             for (let keyCode in keysDown) {
                 if (!keysDown[keyCode]) continue;
@@ -132,12 +144,15 @@
                 }
             }
 
-            // console.log('REMINDER: do things game simulation');
-            // console.log(data.entities);
+            if (data.terrain === null || data.terrain === undefined) {
+                if (localGameStateLatest.terrain === null || localGameStateLatest.terrain === undefined) socket.emit('getTerrain');
+                else data.terrain = localGameStateLatest.terrain;
+            }
+
             localGameStateLatest = data;
 
             //draw things last
-            $('#time').text(data.time);
+            $('#time').text(data.time + ' ' + Math.round(1000/timeSinceLastTick));
             drawBoard(); //draw play field again, don't need to do sidebar cause players not updates
             //TODO maybe update sidebar once added player things
         }); //TODO TODO entities n things
@@ -150,7 +165,7 @@
     });
 
     function move(x, y) {
-        if (moveCollidingWithEntity(x, y) //entity collision checks
+        if (moveCollidingWithTerrain(x, y) //entity collision checks
         || (Math.abs(localUserList[userId].position.x + x) + Constants.PLAYER_SIZE / 2 > worldInfo.width / 2 //world edge collision checks
                 || Math.abs(localUserList[userId].position.y + y) + Constants.PLAYER_SIZE / 2 > worldInfo.height / 2)) {
             if (Math.abs(x) >= 1 || Math.abs(y) >= 1) move(x === 0 ? 0 : (x > 0 ? 0.1 : -0.1), y === 0 ? 0 : (y > 0 ? 0.1 : -0.1)); //retry with smaller to get as close as allowed (not stuck 0.9 away cause move is 1)

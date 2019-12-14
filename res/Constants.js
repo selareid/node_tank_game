@@ -1,7 +1,8 @@
 Constants = {
-    MIN_TICK_SPEED: 100,
+    SPAWN_AREA_SIZE: 10,
 
-    ENTITY_WALL: 'wall',
+    TERRAIN_WALL: 'wall',
+
     ENTITY_BULLET: 'bullet',
 
     ORIENTATION_VERTICAL: 0,

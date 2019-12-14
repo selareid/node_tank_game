@@ -1,5 +1,6 @@
 const collisions = require('./collisions.js');
-const {Entity, Wall, Bullet} = require('./Entity.js');
+const {Entity, Bullet} = require('./Entity.js');
+const {Terrain, Wall} = require('./Terrain.js');
 
 class World {
     width;
@@ -7,7 +8,10 @@ class World {
 
     time;
     connectedPlayers = {}; //socket: id
+    terrain = {};
     entities = {};
+
+    pushTerrain = false;
 
     /*
      * arguments: the world dimensions
@@ -35,7 +39,7 @@ class World {
                     ) entity.velocity.y = -entity.velocity.y; //bounce
 
                     //check walls
-                    collisions.handleBulletWallCollision(entity, this.entities, this.width, this.height);
+                    collisions.handleBulletWallCollision(entity, this.terrain, this.width, this.height);
 
                     //check players
                     for (let playerId in players) {
@@ -53,11 +57,34 @@ class World {
                     if (entity.dead) delete this.entities[entity_id];
 
                     break;
-                // walls are pretty static
-                // case Constants.ENTITY_WALL:
-                //     break;
             }
         }
+    }
+
+    /**
+     *
+     * @param {string} type
+     * @param {Position|{x: number, y: number}} position
+     * @param {Object} [options={}]
+     */
+    addTerrain(type, position, options = {}) {
+        let terrainId;
+
+        do {
+            terrainId = Math.floor(Math.random() * 9999999);
+        } while (this.terrain[terrainId] !== undefined && this.terrain[terrainId] !== null);
+
+        switch (type) {
+            case Constants.TERRAIN_WALL:
+                if (options.length < Constants.WALL_WIDTH) throw Constants.ERR_INVALID_ARGUMENTS;
+
+                this.terrain[terrainId] = new Wall(position, options.orientation, options.length);
+                break;
+            default:
+                throw Constants.ERR_INVALID_ARGUMENTS;
+        }
+
+        this.pushTerrain = true;
     }
 
     /**
@@ -74,9 +101,6 @@ class World {
         } while (this.entities[entityId] !== undefined && this.entities[entityId] !== null);
 
         switch (type) {
-            case Constants.ENTITY_WALL:
-                this.entities[entityId] = new Wall(position, options.orientation, options.length);
-                break;
             case Constants.ENTITY_BULLET:
                 this.entities[entityId] = new Bullet(position, this.time, options.velocity);
                 break;
@@ -87,7 +111,7 @@ class World {
 
     newConnectedPlayer(socketId, playerId) {
         this.connectedPlayers[socketId] = playerId;
-        players[playerId].position = new Position(Math.floor(Math.random()*this.width-this.width/2), Math.floor(Math.random()*this.height-this.height/2));
+        players[playerId].position = this.getNewPlayerPosition();
     }
 
     disconnectedPlayer(socketId) {
@@ -98,12 +122,13 @@ class World {
         return {
             time: this.time,
             players: this.connectedPlayers,
-            entities: this.entities
+            entities: this.entities,
+            terrain: this.pushTerrain ? this.terrain : null
         };
     }
 
     getNewPlayerPosition() {
-        return new Position(0, 0);
+        return new Position(Math.floor(Math.random()*Constants.SPAWN_AREA_SIZE)-Constants.SPAWN_AREA_SIZE, Math.floor(Math.random()*Constants.SPAWN_AREA_SIZE)-Constants.SPAWN_AREA_SIZE);
     }
 }
 

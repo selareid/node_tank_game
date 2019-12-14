@@ -8,18 +8,6 @@ class Entity {
     }
 }
 
-class Wall extends Entity {
-    length;
-    orientation;
-
-    constructor(position, orientation, length) {
-        super(position, Constants.ENTITY_WALL);
-
-        this.length = length;
-        this.orientation = orientation;
-    }
-}
-
 class Bullet extends Entity {
     birthTime;
     velocity;
@@ -35,6 +23,5 @@ class Bullet extends Entity {
 
 module.exports = {
     Entity,
-    Wall,
     Bullet
 };

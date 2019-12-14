@@ -92,13 +92,6 @@ function drawBoard() {
             let entity = localGameStateLatest.entities[entityId];
 
             switch (entity.type) {
-                case Constants.ENTITY_WALL:
-                    context.beginPath();
-                    context.fillStyle = 'rgba(60,60,60,0.85)';
-                    context.fillRect(p + (entity.position.x) * 5 - topLeftPos.x * 5, p + entity.position.y * 5 - topLeftPos.y * 5,
-                        entity.orientation === Constants.ORIENTATION_VERTICAL ? Constants.WALL_WIDTH * 5 : entity.length * 5, entity.orientation === Constants.ORIENTATION_VERTICAL ? entity.length * 5 : Constants.WALL_WIDTH * 5);
-                    context.stroke();
-                    break;
                 case Constants.ENTITY_BULLET:
                     context.beginPath();
                     context.fillStyle = 'rgba(0,0,0,0.85)';
@@ -111,6 +104,24 @@ function drawBoard() {
         }
     }
     //draw entities end
+
+    //draw terrain start
+    if (localGameStateLatest.terrain) {
+        for (let terrainId in localGameStateLatest.terrain) {
+            let terrain = localGameStateLatest.terrain[terrainId];
+
+            switch (terrain.type) {
+                case Constants.TERRAIN_WALL:
+                    context.beginPath();
+                    context.fillStyle = 'rgba(60,60,60,0.85)';
+                    context.fillRect(p + (terrain.position.x) * 5 - topLeftPos.x * 5, p + terrain.position.y * 5 - topLeftPos.y * 5,
+                        terrain.orientation === Constants.ORIENTATION_VERTICAL ? Constants.WALL_WIDTH * 5 : terrain.length * 5, terrain.orientation === Constants.ORIENTATION_VERTICAL ? terrain.length * 5 : Constants.WALL_WIDTH * 5);
+                    context.stroke();
+                    break;
+            }
+        }
+    }
+    //draw terrain end
 
     //draw players start
     for (let uId in localUserList) {

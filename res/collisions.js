@@ -32,42 +32,42 @@ function intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
  *
  * @param {Position|{x: number, y:number}} lineStart
  * @param {Position|{x: number, y:number}} lineEnd
- * @param {Object} entity
+ * @param {Object} theWall
  * @returns {boolean}
  */
-function checkLineAgainstWall(lineStart, lineEnd, entity) {
-    return checkLineAgainstWallVerbose(lineStart, lineEnd, entity) !== false;
+function checkLineAgainstWall(lineStart, lineEnd, theWall) {
+    return checkLineAgainstWallVerbose(lineStart, lineEnd, theWall) !== false;
 }
 
-function checkLineAgainstWallVerbose(lineStart, lineEnd, entity) {
-    switch (entity.orientation) {
+function checkLineAgainstWallVerbose(lineStart, lineEnd, theWall) {
+    switch (theWall.orientation) {
         case Constants.ORIENTATION_HORIZONTAL:
             if (intersects(lineStart.x, lineStart.y, lineEnd.x, lineEnd.y,
-                entity.position.x, entity.position.y, entity.position.x + entity.length, entity.position.y)
+                theWall.position.x, theWall.position.y, theWall.position.x + theWall.length, theWall.position.y)
                 || intersects(lineStart.x, lineStart.y, lineEnd.x, lineEnd.y,
-                    entity.position.x, entity.position.y + Constants.WALL_WIDTH, entity.position.x + entity.length, entity.position.y + Constants.WALL_WIDTH)) {
+                    theWall.position.x, theWall.position.y + Constants.WALL_WIDTH, theWall.position.x + theWall.length, theWall.position.y + Constants.WALL_WIDTH)) {
                 return Constants.COLLIDING_HORIZONTAL_SIDE;
             }
 
             if (intersects(lineStart.x, lineStart.y, lineEnd.x, lineEnd.y,
-                entity.position.x, entity.position.y, entity.position.x, entity.position.y + Constants.WALL_WIDTH)
+                theWall.position.x, theWall.position.y, theWall.position.x, theWall.position.y + Constants.WALL_WIDTH)
                 || intersects(lineStart.x, lineStart.y, lineEnd.x, lineEnd.y,
-                    entity.position.x + entity.length, entity.position.y, entity.position.x + entity.length, entity.position.y + Constants.WALL_WIDTH)) {
+                    theWall.position.x + theWall.length, theWall.position.y, theWall.position.x + theWall.length, theWall.position.y + Constants.WALL_WIDTH)) {
                 return Constants.COLLIDING_VERTICAL_SIDE;
             }
             break;
         case Constants.ORIENTATION_VERTICAL:
             if (intersects(lineStart.x, lineStart.y, lineEnd.x, lineEnd.y,
-                entity.position.x, entity.position.y, entity.position.x, entity.position.y + entity.length)
+                theWall.position.x, theWall.position.y, theWall.position.x, theWall.position.y + theWall.length)
                 || intersects(lineStart.x, lineStart.y, lineEnd.x, lineEnd.y,
-                    entity.position.x + Constants.WALL_WIDTH, entity.position.y, entity.position.x + Constants.WALL_WIDTH, entity.position.y + entity.length)) {
+                    theWall.position.x + Constants.WALL_WIDTH, theWall.position.y, theWall.position.x + Constants.WALL_WIDTH, theWall.position.y + theWall.length)) {
                 return Constants.COLLIDING_VERTICAL_SIDE;
             }
 
             if (intersects(lineStart.x, lineStart.y, lineEnd.x, lineEnd.y,
-                entity.position.x, entity.position.y, entity.position.x + Constants.WALL_WIDTH, entity.position.y)
+                theWall.position.x, theWall.position.y, theWall.position.x + Constants.WALL_WIDTH, theWall.position.y)
                 || intersects(lineStart.x, lineStart.y, lineEnd.x, lineEnd.y,
-                    entity.position.x, entity.position.y + entity.length, entity.position.x + Constants.WALL_WIDTH, entity.position.y + entity.length)) {
+                    theWall.position.x, theWall.position.y + theWall.length, theWall.position.x + Constants.WALL_WIDTH, theWall.position.y + theWall.length)) {
                 return Constants.COLLIDING_HORIZONTAL_SIDE;
             }
             break;
@@ -81,16 +81,16 @@ function checkLineAgainstWallVerbose(lineStart, lineEnd, entity) {
  * @alias checkMoveEntities
  * @param {Position} playerPosition - position of moving player
  * @param {Position} newPosition - player's new position
- * @param {Object} entities
+ * @param {Object} terrain_given
  * @returns {boolean} is it colliding
  */
-function checkPlayerMoveEntities(playerPosition, newPosition, entities) {
+function checkPlayerMoveTerrain(playerPosition, newPosition, terrain_given) {
     let x = newPosition.x - playerPosition.x;
     let y = newPosition.y - playerPosition.y;
 
-    for (let entityId in entities) {
-        let entity = entities[entityId];
-        if (entity.type === Constants.ENTITY_WALL) {
+    for (let terrainId in terrain_given) {
+        let terrain = terrain_given[terrainId];
+        if (terrain.type === Constants.TERRAIN_WALL) {
             //the wall .position is the top-left corner
 
             /* one line is the movement line
@@ -117,7 +117,7 @@ function checkPlayerMoveEntities(playerPosition, newPosition, entities) {
                     y: playerPosition.y + Constants.PLAYER_SIZE / 2
                 }
             ]) {
-                if (checkLineAgainstWall(pos, {x: pos.x + x, y: pos.y + y}, entity)) return true;
+                if (checkLineAgainstWall(pos, {x: pos.x + x, y: pos.y + y}, terrain)) return true;
             }
         }
     }
@@ -125,12 +125,19 @@ function checkPlayerMoveEntities(playerPosition, newPosition, entities) {
     return false;
 }
 
-function handleBulletWallCollision(bulletEntity, entities, worldWidth, worldHeight) {
-    for (let entityId in entities) {
-        let entity = entities[entityId];
-        if (entity.type === Constants.ENTITY_WALL) {
-            /* TODO
-             * it doesn't take into account the bullet's size
+/**
+ *
+ * @param {Bullet} bulletEntity - the bullet being checked
+ * @param terrain - world terrain
+ * @param {number} worldWidth - width of the world
+ * @param {number} worldHeight - height of the world
+ * @returns {boolean} - any collision found?
+ */
+function handleBulletWallCollision(bulletEntity, terrain, worldWidth, worldHeight) {
+    for (let terrainId in terrain) {
+        let entity = terrain[terrainId]; //TODO rename from entity to terrain variable, cant be bothered rn, totally gonna do it later - 14-12-2019
+        if (entity.type === Constants.TERRAIN_WALL) {
+            /* TODO - it doesn't take into account the bullet's size
             */
             let relativeX = Math.abs(((entity.position.x+worldWidth) + (entity.orientation === Constants.ORIENTATION_VERTICAL ? Constants.WALL_WIDTH : entity.length)/2) - (bulletEntity.position.x+worldWidth))
                 / ((entity.orientation === Constants.ORIENTATION_VERTICAL ? Constants.WALL_WIDTH : entity.length)/2); // 0 - 1
@@ -147,13 +154,15 @@ function handleBulletWallCollision(bulletEntity, entities, worldWidth, worldHeig
                 if (relativeX > relativeY) bulletEntity.velocity.x = -bulletEntity.velocity.x;
                 else bulletEntity.velocity.y = -bulletEntity.velocity.y;
 
-                return;
+                return true;
             }
         }
     }
+
+    return false;
 }
 
 module.exports = {
-    checkMoveEntities: checkPlayerMoveEntities,
+    checkMoveTerrain: checkPlayerMoveTerrain,
     handleBulletWallCollision
 };

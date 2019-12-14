@@ -21,7 +21,7 @@ function run() {
     /*console.log(*/Saves.World;//);
     //TODO remove or move to Saves.js {type: type, position: position, length: other.length, orientation: other.orientation}
 
-    require('./socket.js')(io); //enable to socket.io things
+    require('./socket.js').io(io); //enable to socket.io things
 
     /*
      * Game loop
@@ -47,6 +47,7 @@ function loop() {
 
     Saves.World.simulate(); //TODO simulate world
     io.emit('gameState', Saves.World.getGameState()); //send game state to users
+    Saves.World.pushTerrain = false;
 }
 
 http.listen(3000, function(){
