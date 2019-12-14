@@ -23,7 +23,7 @@ Constants = {
     MOVE_MAX_DISTANCE: 10,
     WALL_WIDTH: 10,
 
-    BULLET_SIZE: 5,
+    BULLET_SIZE: 2,
     BULLET_SPEED: 0.2,
 
     OK: 0,

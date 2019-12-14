@@ -1,6 +1,8 @@
 const collisions = require('./collisions.js');
+const socketio = require('./socket.js');
 const {Entity, Bullet} = require('./Entity.js');
 const {Terrain, Wall} = require('./Terrain.js');
+
 
 class World {
     width;

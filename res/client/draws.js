@@ -86,25 +86,6 @@ function drawBoard() {
     context.stroke();
     //draw world edge lines end
 
-    //draw entities start
-    if (localGameStateLatest.entities) {
-        for (let entityId in localGameStateLatest.entities) {
-            let entity = localGameStateLatest.entities[entityId];
-
-            switch (entity.type) {
-                case Constants.ENTITY_BULLET:
-                    context.beginPath();
-                    context.fillStyle = 'rgba(0,0,0,0.85)';
-                    context.arc(p + (entity.position.x) * 5 - topLeftPos.x * 5, p + entity.position.y * 5 - topLeftPos.y * 5, Constants.BULLET_SIZE / 2 * 5, 0, 2 * Math.PI);
-                    context.moveTo(p + (entity.position.x) * 5 - topLeftPos.x * 5, p + entity.position.y * 5 - topLeftPos.y * 5);
-                    context.lineTo(p + (entity.position.x) * 5 - topLeftPos.x * 5 + entity.velocity.x * Constants.BULLET_SIZE * 5, p + entity.position.y * 5 - topLeftPos.y * 5 + entity.velocity.y * Constants.BULLET_SIZE * 5);
-                    context.stroke();
-                    break;
-            }
-        }
-    }
-    //draw entities end
-
     //draw terrain start
     if (localGameStateLatest.terrain) {
         for (let terrainId in localGameStateLatest.terrain) {
@@ -122,6 +103,27 @@ function drawBoard() {
         }
     }
     //draw terrain end
+
+    //draw entities start
+    if (localGameStateLatest.entities) {
+        for (let entityId in localGameStateLatest.entities) {
+            let entity = localGameStateLatest.entities[entityId];
+
+            switch (entity.type) {
+                case Constants.ENTITY_BULLET:
+                    context.beginPath();
+                    context.strokeStyle = 'rgba(0,0,0,0)';
+                    context.fillStyle = 'rgba(255,0,0,0.85)';
+                    context.arc(p + (entity.position.x) * 5 - topLeftPos.x * 5, p + entity.position.y * 5 - topLeftPos.y * 5, Constants.BULLET_SIZE / 2 * 5, 0, 2 * Math.PI);
+                    context.moveTo(p + (entity.position.x) * 5 - topLeftPos.x * 5, p + entity.position.y * 5 - topLeftPos.y * 5);
+                    context.lineTo(p + (entity.position.x) * 5 - topLeftPos.x * 5 + entity.velocity.x * Constants.BULLET_SIZE * 5, p + entity.position.y * 5 - topLeftPos.y * 5 + entity.velocity.y * Constants.BULLET_SIZE * 5);
+                    context.fill();
+                    context.stroke();
+                    break;
+            }
+        }
+    }
+    //draw entities end
 
     //draw players start
     for (let uId in localUserList) {
