@@ -32,7 +32,11 @@ function run() {
 
     //loop start (TODO)
     setInterval(() => {
-        loop();
+        try {
+            loop();
+        } catch (e) {
+            console.log('ERROR in loop' + e.stack ? e.stack : e);
+        }
     }, Math.floor(1000/60));
     //loop end
 }

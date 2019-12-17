@@ -31,6 +31,7 @@ function io(io) {
 
         socket.on('userMove', (newPosition) => {
             let moveStatus = players[playerId].move(Saves.World, newPosition);
+            players[playerId].shoot(Saves.World);
             // players[playerId].position.set(newPosition.x, newPosition.y); the old way
             if (moveStatus === Constants.OK || moveStatus === Constants.ERR_SUCCEEDED) {
                 socket.broadcast.emit('userMoved', {id: playerId, position: players[playerId].position});

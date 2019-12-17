@@ -21,11 +21,13 @@ Constants = {
 
     PLAYER_SIZE: 8,
     MOVE_MAX_DISTANCE: 20,
+    PLAYER_MAX_AMMO: 300,
+    PLAYER_SHOOT_SPEED: 10, //shots per second
     WALL_WIDTH: 10,
 
-    BULLET_SIZE: 2,
-    BULLET_SPEED: 1,
-    BULLET_LIFETIME: 50000, //in milliseconds
+    BULLET_SIZE: 1,
+    BULLET_SPEED: 1.3,
+    BULLET_LIFETIME: 3000, //in milliseconds
 
     OK: 0,
     ERR_SUCCEEDED: 1, //it be like that sometimes

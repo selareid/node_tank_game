@@ -7,7 +7,7 @@ const Saves = {
         if (!theWorld) { //TODO have actual saving lol
             theWorld = new World(1000, 1000);
 
-            for (let i = 0; i< 500; i++) {
+            for (let i = 0; i< 100; i++) {
                 theWorld.addTerrain(Constants.TERRAIN_WALL,
                     new Position(Math.floor(Math.random() * theWorld.width - theWorld.width / 2), Math.floor(Math.random() * theWorld.height - theWorld.height / 2)), {
                         orientation: Math.floor(Math.random() * 2) >= 1 ? Constants.ORIENTATION_VERTICAL : Constants.ORIENTATION_HORIZONTAL,
@@ -15,13 +15,13 @@ const Saves = {
                     });
             }
 
-            let newBulletAngle;
-            for (let i = 0; i < 100; i++) {
-                newBulletAngle = Math.floor(Math.random() * 360);
-                let id = theWorld.addEntity(Constants.ENTITY_BULLET, new Position(Math.floor(Math.random() * theWorld.width - theWorld.width / 2), Math.floor(Math.random() * theWorld.height - theWorld.height / 2)),
-                    {velocity: new Velocity(Constants.BULLET_SPEED * Math.cos(newBulletAngle), Constants.BULLET_SPEED * -Math.sin(newBulletAngle))});
-                theWorld.entities[id].lifeCountdown += Math.floor(Math.random()*10000-5000);
-            }
+            // let newBulletAngle;
+            // for (let i = 0; i < 100; i++) {
+            //     newBulletAngle = Math.floor(Math.random() * 360);
+            //     let id = theWorld.addEntity(Constants.ENTITY_BULLET, new Position(Math.floor(Math.random() * theWorld.width - theWorld.width / 2), Math.floor(Math.random() * theWorld.height - theWorld.height / 2)),
+            //         {velocity: new Velocity(Constants.BULLET_SPEED * Math.cos(newBulletAngle), Constants.BULLET_SPEED * -Math.sin(newBulletAngle))});
+            //     theWorld.entities[id].lifeCountdown += Math.floor(Math.random()*10000-5000);
+            // }
         }
 
         return theWorld;
