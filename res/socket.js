@@ -31,7 +31,6 @@ function io(io) {
 
         socket.on('userMove', (newPosition) => {
             let moveStatus = players[playerId].move(Saves.World, newPosition);
-            players[playerId].shoot(Saves.World);
             // players[playerId].position.set(newPosition.x, newPosition.y); the old way
             if (moveStatus === Constants.OK || moveStatus === Constants.ERR_SUCCEEDED) {
                 socket.broadcast.emit('userMoved', {id: playerId, position: players[playerId].position});
@@ -40,6 +39,10 @@ function io(io) {
                     socket.emit('userMoved', {id: playerId, position: players[playerId].position});
                 }, 500 * Math.random() + 120); //LAG 4 TESTING TODO
             }
+        });
+
+        socket.on('userShoot', () => {
+            players[playerId].shoot(Saves.World);
         });
 
         socket.on('getUserList', () => socket.emit('userList', players));
