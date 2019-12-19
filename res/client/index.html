@@ -25,7 +25,7 @@
     </script>
 </head>
 <body style="background-color: #ffffff">
-    <div id="playArea" style="background-color: #d1d1d1; float: left;"></div>
+    <div id="playArea" style="background-color: #d1d1d1; float: left; display: block;"></div>
     <div id="sideBar" style="float: left; width:max-content; height: auto; padding-left: 25px;">
         <p id="time">____</p>
         <p id="userListP"></p>
@@ -130,16 +130,16 @@
 
                 switch(parseInt(keyCode)) { //deprecated, yet supported
                     case 87: //w
-                        move(0, -1); // up
+                        move(0, -0.3); // up
                         break;
                     case 83: //s
-                        move(0, 1); // down
+                        move(0, 0.3); // down
                         break;
                     case 68: //d
-                        move(1, 0); // right
+                        move(0.3, 0); // right
                         break;
                     case 65: //a
-                        move(-1, 0); // left
+                        move(-0.3, 0); // left
                         break;
                     case 32:
                         shoot();

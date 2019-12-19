@@ -42,6 +42,10 @@ Player.prototype.move = function(world, newPosition) { //TODO make move (max any
 };
 
 Player.prototype.shoot = function(world) {
+    if (this.lastShot === world.time) return Constants.ERR_TOO_FAST;
+
+    this.ammo += this.ammo >= Constants.PLAYER_MAX_AMMO ? 0 : (timeSinceLastTick * (world.time - this.lastShot)) / 500;
+
     if (this.ammo < 1) return Constants.ERR_ILLEGAL;
     if (timeSinceLastTick * (world.time - this.lastShot) < 1000/Constants.PLAYER_SHOOT_SPEED) return Constants.ERR_ILLEGAL;
 

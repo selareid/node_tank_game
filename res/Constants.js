@@ -20,7 +20,7 @@ Constants = {
     ACTION_MOVE: 'move',
 
     PLAYER_SIZE: 8,
-    MOVE_MAX_DISTANCE: 20,
+    MOVE_MAX_DISTANCE: 0.4,
     PLAYER_MAX_AMMO: 300,
     PLAYER_SHOOT_SPEED: 10, //shots per second
     WALL_WIDTH: 10,
@@ -32,5 +32,6 @@ Constants = {
     OK: 0,
     ERR_SUCCEEDED: 1, //it be like that sometimes
     ERR_INVALID_ARGUMENTS: 2,
-    ERR_ILLEGAL: 3
+    ERR_ILLEGAL: 3,
+    ERR_TOO_FAST: 4
 };

@@ -5,7 +5,7 @@ function updateSideBar() {
     //draw other users
     for (let uId in localUserList) {
         if (uId == userId) continue;
-        $('#userListP').append(`<br>${uId}: <br>&emsp; position: {x: ${localUserList[uId].position.x}, y: ${localUserList[uId].position.y}}`);
+        $('#userListP').append(`<br>${uId}: <br>&emsp; position: {x: ${Math.round(localUserList[uId].position.x)}, y: ${Math.round(localUserList[uId].position.y)}}`);
     }
 }
 
