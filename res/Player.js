@@ -41,20 +41,20 @@ Player.prototype.move = function(world, newPosition) { //TODO make move (max any
     return Constants.OK; //ran successfully
 };
 
-Player.prototype.shoot = function(world) {
-    if (this.lastShot === world.time) return Constants.ERR_TOO_FAST;
-
-    this.ammo += this.ammo >= Constants.PLAYER_MAX_AMMO ? 0 : (timeSinceLastTick * (world.time - this.lastShot)) / 500;
-
-    if (this.ammo < 1) return Constants.ERR_ILLEGAL;
-    if (timeSinceLastTick * (world.time - this.lastShot) < 1000/Constants.PLAYER_SHOOT_SPEED) return Constants.ERR_ILLEGAL;
-
-    world.addEntity(Constants.ENTITY_BULLET, new Position (this.position.x, this.position.y-Constants.PLAYER_SIZE-Constants.BULLET_SIZE/2),
-        {velocity: new Velocity(0, -Constants.BULLET_SPEED)});
-    this.ammo--;
-    this.lastShot = world.time;
-
-    return Constants.OK;
-};
+// Player.prototype.shoot = function(world) {
+//     if (this.lastShot === world.time) return Constants.ERR_TOO_FAST;
+//
+//     this.ammo += this.ammo >= Constants.PLAYER_MAX_AMMO ? 0 : (timeSinceLastTick * (world.time - this.lastShot)) / 500;
+//
+//     if (this.ammo < 1) return Constants.ERR_ILLEGAL;
+//     if (timeSinceLastTick * (world.time - this.lastShot) < 1000/Constants.PLAYER_SHOOT_SPEED) return Constants.ERR_ILLEGAL;
+//
+//     world.addEntity(Constants.ENTITY_BULLET, new Position (this.position.x, this.position.y-Constants.PLAYER_SIZE-Constants.BULLET_SIZE/2),
+//         {velocity: new Velocity(0, -Constants.BULLET_SPEED)});
+//     this.ammo--;
+//     this.lastShot = world.time;
+//
+//     return Constants.OK;
+// };
 
 module.exports = Player;

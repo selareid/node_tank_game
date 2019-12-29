@@ -41,9 +41,9 @@ function io(io) {
             }
         });
 
-        socket.on('userShoot', () => {
-            players[playerId].shoot(Saves.World);
-        });
+        // socket.on('userShoot', () => {
+        //     players[playerId].shoot(Saves.World);
+        // });
 
         socket.on('getUserList', () => socket.emit('userList', players));
         socket.on('disconnect', function () {

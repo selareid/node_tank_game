@@ -4,6 +4,7 @@ Constants = {
     TERRAIN_WALL: 'wall',
 
     ENTITY_BULLET: 'bullet',
+    ENTITY_VEHICLE_CAR: 'car',
 
     ORIENTATION_VERTICAL: 0,
     ORIENTATION_HORIZONTAL: 1,
