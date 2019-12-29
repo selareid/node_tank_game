@@ -132,8 +132,8 @@ function drawBoard() {
 
         context.fillStyle = !u.dead ? userId == uId ? 'rgba(0,255,0,0.75)' : 'rgba(64,64,285,0.75)' : 'rgba(127,127,127,0.76)';
         context.fillRect(p+u.position.x*5-Constants.PLAYER_SIZE/2*5-topLeftPos.x*5, p+u.position.y*5-Constants.PLAYER_SIZE/2*5-topLeftPos.y*5, 40, 40);
-        context.fillStyle = '#7b7b7b';//!u.dead ? userId == uId ? 'rgba(0,255,0,0.75)' : 'rgba(64,64,285,0.75)' : 'rgba(127,127,127,0.76)';
-        context.fillRect(p+u.position.x*5-topLeftPos.x*5-5, p+u.position.y*5-Constants.PLAYER_SIZE/2*5-topLeftPos.y*5-10, 10, 20);
+        // context.fillStyle = '#7b7b7b'; //the stick shootie thingy not in use
+        // context.fillRect(p+u.position.x*5-topLeftPos.x*5-5, p+u.position.y*5-Constants.PLAYER_SIZE/2*5-topLeftPos.y*5-10, 10, 20);
     }
     //draw players end
 }
