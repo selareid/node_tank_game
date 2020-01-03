@@ -52,13 +52,15 @@
     let context = canvas.get(0).getContext("2d");
 
     let options = {
-        track: true
+        track: true,
+        hoverSelector: false,
     };
 
     let worldInfo;
     let localUserList = {};
     let localGameStateLatest = {};
     let topLeftPos = {x: 0, y: 0};
+    let relativeMousePosition = {x: 0, y: 0}; //relative to mainCanvas
     let keysDown = {};
 
     socket.on('worldInfo', function (givenWorldInfo) {
@@ -66,7 +68,7 @@
         worldInfo = givenWorldInfo;
         delete worldInfo.terrain;
 
-        drawBoard();
+        Draw.drawBoard();
 
         let mouseButtonDown = false;
 
@@ -80,10 +82,13 @@
         });
 
         document.getElementById('mainCanvas').addEventListener('mousemove', function (event) {
+            relativeMousePosition.x = event.offsetX;
+            relativeMousePosition.y = event.offsetY;
+
             if (!mouseButtonDown) return;
             topLeftPos.x -= Math.floor(event.movementX*1000/5)/1000;
             topLeftPos.y -= Math.floor(event.movementY*1000/5)/1000;
-            drawBoard();
+            Draw.drawBoard();
         });
         //attach mouse events end
 
@@ -105,12 +110,12 @@
             //if first load of list this session, center on player
             if (Object.keys(localUserList).length === 0) {
                 localUserList = ul;
-                center(false);
+                Draw.center(false);
             }
             else localUserList = ul;
 
-            drawBoard();
-            updateSideBar();
+            Draw.drawBoard();
+            Draw.updateSideBar();
         });
 
         socket.on('terrain', function (terrainData) {
@@ -156,14 +161,32 @@
 
             //draw things last
             $('#time').text(data.time + ' ' + Math.round(1000/timeSinceLastTick));
-            drawBoard(); //draw play field again, don't need to do sidebar cause players not updates
+            Draw.drawBoard(); //draw play field again, don't need to do sidebar cause players not updates
+
+            //TODO TODO MOVE STARTS
+            //draws the hovered (square??) outline darken(??)
+            if (options.hoverSelector) {
+                let gameMousePositionX = topLeftPos.x + (relativeMousePosition.x - p) / 5;
+                let gameMousePositionY = topLeftPos.y + (relativeMousePosition.y - p) / 5;
+
+                // console.log(gameMousePositionX);
+                // console.log(Math.round(gameMousePositionX*100)/100);
+                gameMousePositionX = Math.round(gameMousePositionX / 5) * 5;
+                gameMousePositionY = Math.round(gameMousePositionY / 5) * 5;
+
+                context.fillStyle = 'rgba(160,160,160,0.76)';
+                context.fillRect(p + gameMousePositionX * 5 - 5 / 2 * 5 - topLeftPos.x * 5, p + gameMousePositionY * 5 - 5 / 2 * 5 - topLeftPos.y * 5, 5 * 5, 5 * 5);
+            }
+            //TODO TODO MOVE ENDS
+
+
             //TODO maybe update sidebar once added player things
         }); //TODO TODO entities n things
 
         socket.on('userDisconnected', function (disconnectedId) {
             delete localUserList[disconnectedId];
-            drawBoard();
-            updateSideBar();
+            Draw.drawBoard();
+            Draw.updateSideBar();
         });
 
         socket.on('playerDied', function (deadPlayerId) {
@@ -197,18 +220,18 @@
         localUserList[userId].position.x = Math.round(localUserList[userId].position.x * 100) / 100;
         localUserList[userId].position.y = Math.round(localUserList[userId].position.y * 100) / 100;
 
-        drawBoard();
-        updateSideBar();
+        Draw.drawBoard();
+        Draw.updateSideBar();
         socket.emit('userMove', localUserList[userId].position);
-        if (options.track) center();
+        if (options.track) Draw.center();
     }
 
     socket.on('userMoved', (info) => {
         localUserList[info.id].position = info.position;
-        updateSideBar();
-        drawBoard();
+        Draw.updateSideBar();
+        Draw.drawBoard();
 
-        if (options.track && info.id === userId) center();
+        if (options.track && info.id === userId) Draw.center();
     });
 </script>
 </html>
