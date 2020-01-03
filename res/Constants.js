@@ -2,9 +2,10 @@ Constants = {
     SPAWN_AREA_SIZE: 10,
 
     TERRAIN_WALL: 'wall',
+    TERRAIN_DIRT: 'dirt',
 
     ENTITY_BULLET: 'bullet',
-    ENTITY_VEHICLE_CAR: 'car',
+    // ENTITY_VEHICLE_CAR: 'car',
 
     ORIENTATION_VERTICAL: 0,
     ORIENTATION_HORIZONTAL: 1,
