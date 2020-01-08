@@ -10,11 +10,14 @@ class Player {
     deathTick;
     ammo = 0;
     lastShot = 0;
+    inventory = [];
+    selectedInventorySlot = 0;
 
     constructor(id) {
         this.id = id;
         this.position = Saves.World.getNewPlayerPosition();
         this.ammo = Constants.PLAYER_MAX_AMMO;
+        for (let i = 0; i < Constants.HOT_BAR_SLOTS; i++) this.inventory[i] = null;
     }
 
     alive() {

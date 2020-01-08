@@ -144,6 +144,36 @@ const Draw = {
             // context.stroke();
         }
         //draw players end
+
+        //draw hot bar start
+        const hotBarWidthSize = 2/5; //fraction of canvas width for hot bar size
+        let hotBarWidth = Math.round(cw * hotBarWidthSize) + cw * hotBarWidthSize % Constants.HOT_BAR_SLOTS;
+        let hotBarHeight = hotBarWidth/Constants.HOT_BAR_SLOTS;
+
+        context.fillStyle = 'rgba(237,220,70,0.91)';
+        context.fillRect((cw - hotBarWidth)/2, ch - 10 - hotBarHeight, hotBarWidth, hotBarHeight);
+
+        context.fillStyle = 'rgba(0,40,237,0.91)';
+        for (let i = 0; i < Constants.HOT_BAR_SLOTS; i++) {
+            if (!userId || ! localUserList || !localUserList[userId]) break;
+
+            if (localUserList[userId].inventory[i]) context.fillRect((cw - hotBarWidth)/2 + i*hotBarWidth/Constants.HOT_BAR_SLOTS + 3, ch - 10 - hotBarHeight + 3, hotBarWidth/Constants.HOT_BAR_SLOTS - 6, hotBarHeight - 6);
+        }
+
+        context.beginPath();
+        context.moveTo((cw - hotBarWidth)/2, ch - 10);
+        context.lineTo((cw + hotBarWidth)/2, ch - 10);
+
+        context.moveTo((cw - hotBarWidth)/2, ch - 10 - hotBarHeight);
+        context.lineTo((cw + hotBarWidth)/2, ch - 10 - hotBarHeight);
+
+        for (let i = (cw - hotBarWidth)/2; i <= (cw + hotBarWidth)/2; i += hotBarWidth/Constants.HOT_BAR_SLOTS) {
+            context.moveTo(i, ch - 10);
+            context.lineTo(i, ch - 10 - hotBarHeight);
+        }
+
+        context.stroke();
+        //draw hot bar end
     },
 
     center: function (redraw = true) {

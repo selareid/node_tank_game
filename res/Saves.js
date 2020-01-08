@@ -5,7 +5,7 @@ let theWorld;
 const Saves = {
     get World() {
         if (!theWorld) { //TODO have actual saving lol
-            theWorld = new World(100, 100);
+            theWorld = new World(250, 250);
 
             for (let i = 0; i< 7; i++) {
                 theWorld.addTerrain(Constants.TERRAIN_WALL,
