@@ -11,6 +11,8 @@ const Draw = {
     },
 
     drawBoard: function () {
+        if (!userId || ! localUserList || !localUserList[userId]) return;
+
         if (cw !== window.innerWidth*0.75) socket.emit('disconnect'); //TODO REMOVE THIS SUICIDE
 
         context.clearRect(0, 0, cw, ch); //clears the canvas
@@ -152,8 +154,6 @@ const Draw = {
         context.fillRect((cw - hotBarWidth)/2, ch - 10 - hotBarHeight, hotBarWidth, hotBarHeight);
 
         for (let i = 0; i < Constants.HOT_BAR_SLOTS; i++) {
-            if (!userId || ! localUserList || !localUserList[userId]) break;
-
             if (localUserList[userId].inventory[i]) {
                 //TODO draw from image file
 
@@ -178,6 +178,11 @@ const Draw = {
             context.lineTo(i, ch - 10 - hotBarHeight);
         }
 
+        //draw selected slot visual feedback
+        context.fillStyle = 'rgba(225,225,225,0.51)';
+        context.fillRect((cw - hotBarWidth) / 2 + localUserList[userId].selectedHotBar * hotBarWidth / Constants.HOT_BAR_SLOTS, ch - 10 - hotBarHeight, hotBarWidth / Constants.HOT_BAR_SLOTS, hotBarHeight);
+
+        //handle mouse hot bar hover
         if (relativeMousePosition.x > (cw - hotBarWidth)/2 && relativeMousePosition.x < (cw + hotBarWidth)/2
         && relativeMousePosition.y > ch - 10 - hotBarHeight && relativeMousePosition.y < ch - 10) { //is mouse over the hot bar
             // console.log(Math.ceil(((relativeMousePosition.x - cw/2 + hotBarWidth/2) * Constants.HOT_BAR_SLOTS) / hotBarWidth))
