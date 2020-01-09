@@ -52,6 +52,10 @@
     let canvas = $('<canvas/>').attr({id: "mainCanvas", width: cw, height: ch}).appendTo($('#playArea'));
     let context = canvas.get(0).getContext("2d");
 
+    const hotBarWidthSize = 2/5; //fraction of canvas width for hot bar size
+    let hotBarWidth = Math.round(cw * hotBarWidthSize) + cw * hotBarWidthSize % Constants.HOT_BAR_SLOTS;
+    let hotBarHeight = hotBarWidth/Constants.HOT_BAR_SLOTS;
+
     let options = {
         track: true,
         hoverSelector: false,
@@ -61,7 +65,7 @@
     let localUserList = {};
     let localGameStateLatest = {};
     let topLeftPos = {x: 0, y: 0};
-    let relativeMousePosition = {x: 0, y: 0}; //relative to mainCanvas
+    let relativeMousePosition = {x: 0, y: 0, lastMove: 0}; //relative to mainCanvas
     let keysDown = {};
 
     socket.on('worldInfo', function (givenWorldInfo) {
@@ -85,6 +89,7 @@
         document.getElementById('mainCanvas').addEventListener('mousemove', function (event) {
             relativeMousePosition.x = event.offsetX;
             relativeMousePosition.y = event.offsetY;
+            relativeMousePosition.lastMove = new Date();
 
             if (!mouseButtonDown) return;
             topLeftPos.x -= Math.floor(event.movementX*1000/5)/1000;

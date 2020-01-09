@@ -11,6 +11,8 @@ const Draw = {
     },
 
     drawBoard: function () {
+        if (cw !== window.innerWidth*0.75) socket.emit('disconnect'); //TODO REMOVE THIS SUICIDE
+
         context.clearRect(0, 0, cw, ch); //clears the canvas
 
         //draw grid start
@@ -146,10 +148,6 @@ const Draw = {
         //draw players end
 
         //draw hot bar start
-        const hotBarWidthSize = 2/5; //fraction of canvas width for hot bar size
-        let hotBarWidth = Math.round(cw * hotBarWidthSize) + cw * hotBarWidthSize % Constants.HOT_BAR_SLOTS;
-        let hotBarHeight = hotBarWidth/Constants.HOT_BAR_SLOTS;
-
         context.fillStyle = 'rgba(237,220,70,0.91)';
         context.fillRect((cw - hotBarWidth)/2, ch - 10 - hotBarHeight, hotBarWidth, hotBarHeight);
 
@@ -178,6 +176,26 @@ const Draw = {
         for (let i = (cw - hotBarWidth)/2; i <= (cw + hotBarWidth)/2 + 1; i += hotBarWidth/Constants.HOT_BAR_SLOTS) {
             context.moveTo(i, ch - 10);
             context.lineTo(i, ch - 10 - hotBarHeight);
+        }
+
+        if (relativeMousePosition.x > (cw - hotBarWidth)/2 && relativeMousePosition.x < (cw + hotBarWidth)/2
+        && relativeMousePosition.y > ch - 10 - hotBarHeight && relativeMousePosition.y < ch - 10) { //is mouse over the hot bar
+            // console.log(Math.ceil(((relativeMousePosition.x - cw/2 + hotBarWidth/2) * Constants.HOT_BAR_SLOTS) / hotBarWidth))
+
+            context.fillStyle = 'rgba(255,255,255,0.51)';
+            let hoveredSlot = Math.floor(((relativeMousePosition.x - cw/2 + hotBarWidth/2) * Constants.HOT_BAR_SLOTS) / hotBarWidth);
+            context.fillRect((cw - hotBarWidth) / 2 + hoveredSlot * hotBarWidth / Constants.HOT_BAR_SLOTS, ch - 10 - hotBarHeight, hotBarWidth / Constants.HOT_BAR_SLOTS, hotBarHeight);
+
+            /* (cw - hotBarWidth) / 2 + i * hotBarWidth / Constants.HOT_BAR_SLOTS + 3 = xPos
+             * ((cw - hotBarWidth) / 2) + (i * hotBarWidth / Constants.HOT_BAR_SLOTS) = xPos - 3
+             * cw/2 - hotBarWidth/2 + i(hotBarWidth)/Constants.HOT_BAR_SLOTS = xPos - 3
+             * i(hotBarWidth) = (xPos - 3 - cw/2 + hotBarWidth/2) * Constants.HOT_BAR_SLOTS
+             * i = ((xPos - 3 - cw/2 + hotBarWidth/2) * Constants.HOT_BAR_SLOTS) / hotBarWidth
+             * Where i is the square being hovered over
+             * removed the +3/-3 because it was for the smaller square (for drawing item)
+             * Math.ceil(((relativeMousePosition.x - cw/2 + hotBarWidth/2) * Constants.HOT_BAR_SLOTS) / hotBarWidth)
+             * this gives 1-start notation hot bar hover
+             */
         }
 
         context.stroke();
