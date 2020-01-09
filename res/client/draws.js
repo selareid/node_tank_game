@@ -167,7 +167,7 @@ const Draw = {
         context.moveTo((cw - hotBarWidth)/2, ch - 10 - hotBarHeight);
         context.lineTo((cw + hotBarWidth)/2, ch - 10 - hotBarHeight);
 
-        for (let i = (cw - hotBarWidth)/2; i <= (cw + hotBarWidth)/2; i += hotBarWidth/Constants.HOT_BAR_SLOTS) {
+        for (let i = (cw - hotBarWidth)/2; i <= (cw + hotBarWidth)/2 + 1; i += hotBarWidth/Constants.HOT_BAR_SLOTS) {
             context.moveTo(i, ch - 10);
             context.lineTo(i, ch - 10 - hotBarHeight);
         }
