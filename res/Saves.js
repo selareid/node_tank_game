@@ -1,6 +1,18 @@
-let {World, Position, Velocity} = require('./World.js');
+const {Player} = require('./Player.js');
+const {World, Position, Velocity} = require('./World.js');
 
 let theWorld;
+let thePlayers = {};
+
+function getNewPlayerId() {
+    let id;
+
+    do {
+        id = Math.floor(Math.random()*9999999);
+    } while (Saves.Players.checkPlayerExists(id));
+
+    return id;
+}
 
 const Saves = {
     get World() {
@@ -29,6 +41,46 @@ const Saves = {
 
     set World(newWorld) {
         theWorld = newWorld;
+    },
+
+    Players: {
+        checkPlayerExists: function(userId) {
+            return thePlayers[userId] !== null && thePlayers[userId] !== undefined;
+        },
+
+        getActivePlayer: function() {
+            let toReturn = {};
+
+            for (let socketId in theWorld.connectedPlayers) {
+                let playerId = theWorld.connectedPlayers[socketId];
+
+                toReturn[playerId] = thePlayers[playerId];
+            }
+
+            return toReturn;
+        },
+
+        getPlayers: function() {
+            return thePlayers;
+        },
+
+        getPlayer: function(userId) {
+            if (!thePlayers[userId]) console.log(`RIP, tried to get user ${userId} but they don't exist lol`);
+
+            return thePlayers[userId];
+        },
+
+        newPlayer: function () {
+            let newPlayerId = getNewPlayerId();
+
+            thePlayers[newPlayerId] = new Player(newPlayerId);
+
+            return newPlayerId;
+        },
+
+        removePlayer: function (userId) {
+            delete thePlayers[userId];
+        }
     }
 };
 

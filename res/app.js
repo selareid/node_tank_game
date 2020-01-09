@@ -11,8 +11,6 @@ app.get('/collisions.js', (req, res) => {res.sendFile(__dirname + '/client/colli
 app.get('/Constants.js', (req, res) => {res.sendFile(__dirname + '/Constants.js');});
 app.get('/Items.js', (req, res) => {res.sendFile(__dirname + '/client/Items.js');});
 
-players = {};
-
 /*
  * store everything in entity look-up table (walls, bullets, etc)
  * players in own lookup table

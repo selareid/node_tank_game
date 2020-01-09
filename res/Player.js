@@ -1,4 +1,3 @@
-const Saves = require('./Saves.js');
 const collisions = require('./collisions.js');
 const socketHandling = require('./socket.js');
 const {World, Position, Velocity} = require('./World.js');
@@ -15,7 +14,7 @@ class Player {
 
     constructor(id) {
         this.id = id;
-        this.position = Saves.World.getNewPlayerPosition();
+        this.position = require('./Saves.js').World.getNewPlayerPosition();
         this.ammo = Constants.PLAYER_MAX_AMMO;
         for (let i = 0; i < Constants.INVENTORY_SLOTS; i++) this.inventory[i] = null;
     }
@@ -26,7 +25,7 @@ class Player {
 
     die() {
         this.dead = true;
-        this.deathTick = Saves.World.time;
+        this.deathTick = require('./Saves.js').World.time;
         socketHandling.pushDeath(this.id);
     }
 }
@@ -60,4 +59,4 @@ Player.prototype.move = function(world, newPosition) { //TODO make move (max any
 //     return Constants.OK;
 // };
 
-module.exports = Player;
+module.exports = {Player};

@@ -48,8 +48,8 @@ class World {
 
                     if (!entity.dead) {
                         //check players
-                        for (let playerId in players) {
-                            let player = players[playerId];
+                        for (let playerId in require('./Saves.js').Players.getPlayers()) {
+                            let player = require('./Saves.js').Players.getPlayer(playerId);
                             if (player.alive()) continue;
 
                             if (Math.abs(player.position.x - entity.position.x) < (Constants.BULLET_SIZE + Constants.PLAYER_SIZE) / 2
@@ -123,7 +123,7 @@ class World {
 
     newConnectedPlayer(socketId, playerId) {
         this.connectedPlayers[socketId] = playerId;
-        players[playerId].position = this.getNewPlayerPosition();
+        require('./Saves.js').Players.getPlayer(playerId).position = this.getNewPlayerPosition();
     }
 
     disconnectedPlayer(socketId) {
