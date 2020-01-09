@@ -157,7 +157,7 @@ const Draw = {
         for (let i = 0; i < Constants.HOT_BAR_SLOTS; i++) {
             if (!userId || ! localUserList || !localUserList[userId]) break;
 
-            if (localUserList[userId].hotBar[i]) context.fillRect((cw - hotBarWidth)/2 + i*hotBarWidth/Constants.HOT_BAR_SLOTS + 3, ch - 10 - hotBarHeight + 3, hotBarWidth/Constants.HOT_BAR_SLOTS - 6, hotBarHeight - 6);
+            if (localUserList[userId].inventory[i]) context.fillRect((cw - hotBarWidth)/2 + i*hotBarWidth/Constants.HOT_BAR_SLOTS + 3, ch - 10 - hotBarHeight + 3, hotBarWidth/Constants.HOT_BAR_SLOTS - 6, hotBarHeight - 6);
         }
 
         context.beginPath();

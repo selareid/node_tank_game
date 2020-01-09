@@ -26,6 +26,7 @@ Constants = {
     PLAYER_MAX_AMMO: 300,
     PLAYER_SHOOT_SPEED: 10, //shots per second
     HOT_BAR_SLOTS: 12, // 0 - 11
+    INVENTORY_SLOTS: 12, // 0 - 11
     WALL_WIDTH: 10,
 
     BULLET_SIZE: 1,
