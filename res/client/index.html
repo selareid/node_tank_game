@@ -13,9 +13,23 @@
         var socket = io();
         let userId;
 
-        socket.on('userId', function (d) {
-            console.log('user id ' + d);
-            userId = d;
+        socket.on('pleaseAuth', function () { //TODO get decent auth lol
+
+            let splitHREF = window.location.href.split('?');
+            if (splitHREF && splitHREF[1]) socket.emit('authing', splitHREF[1])
+            else socket.emit('authing', -1);
+
+            socket.on('authFailedMateUCanNoHackaMeYa', function () {
+                console.log('auth failed, credentials in use'); //TODO change this message
+                document.body.innerHTML = "auth failed, credentials in use";
+            });
+
+            socket.on('userId', function (d) {
+                console.log('user id ' + d);
+                userId = d;
+
+                window.history.pushState("object or string", "Title", `?${d}`);
+            });
         });
 
         socket.on('disconnect', function () {

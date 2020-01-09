@@ -123,7 +123,7 @@ class World {
 
     newConnectedPlayer(socketId, playerId) {
         this.connectedPlayers[socketId] = playerId;
-        require('./Saves.js').Players.getPlayer(playerId).position = this.getNewPlayerPosition();
+        // require('./Saves.js').Players.getPlayer(playerId).position = this.getNewPlayerPosition(); //TODO idk, maybe readd, removed cause reloading in same position is cool (i guess?)
     }
 
     disconnectedPlayer(socketId) {

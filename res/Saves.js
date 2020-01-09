@@ -48,7 +48,7 @@ const Saves = {
             return thePlayers[userId] !== null && thePlayers[userId] !== undefined;
         },
 
-        getActivePlayer: function() {
+        getActivePlayers: function() {
             let toReturn = {};
 
             for (let socketId in theWorld.connectedPlayers) {
