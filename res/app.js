@@ -9,6 +9,7 @@ app.get('/', (req, res) => {res.sendFile(__dirname + '/client/index.html');});
 app.get('/draws.js', (req, res) => {res.sendFile(__dirname + '/client/draws.js');});
 app.get('/collisions.js', (req, res) => {res.sendFile(__dirname + '/client/collisions.js');});
 app.get('/Constants.js', (req, res) => {res.sendFile(__dirname + '/Constants.js');});
+app.get('/Items.js', (req, res) => {res.sendFile(__dirname + '/client/Items.js');});
 
 players = {};
 

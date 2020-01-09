@@ -5,8 +5,9 @@
  */
 
 const Items = {
-    ITEM_WALL: {
+    [Constants.ITEM_WALL]: {
         description: "'tis wall",
-        icon: null
+        iconImage: null,
+        iconColour: 'rgb(61,61,79)' //TODO change to use icon
     }
 };

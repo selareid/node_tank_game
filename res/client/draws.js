@@ -153,13 +153,17 @@ const Draw = {
         context.fillStyle = 'rgba(237,220,70,0.91)';
         context.fillRect((cw - hotBarWidth)/2, ch - 10 - hotBarHeight, hotBarWidth, hotBarHeight);
 
-        context.fillStyle = 'rgba(0,40,237,0.91)';
         for (let i = 0; i < Constants.HOT_BAR_SLOTS; i++) {
             if (!userId || ! localUserList || !localUserList[userId]) break;
 
             if (localUserList[userId].inventory[i]) {
                 //TODO draw from image file
-                
+
+                if (Items[localUserList[userId].inventory[i].id] && (Items[localUserList[userId].inventory[i].id].iconImage || Items[localUserList[userId].inventory[i].id].iconColour)) {
+                    context.fillStyle = Items[localUserList[userId].inventory[i].id].iconColour ? Items[localUserList[userId].inventory[i].id].iconColour : 'rgba(237,216,188,0.91)';
+                }
+                else context.fillStyle = 'rgba(0,40,237,0.91)';
+
                 context.fillRect((cw - hotBarWidth) / 2 + i * hotBarWidth / Constants.HOT_BAR_SLOTS + 3, ch - 10 - hotBarHeight + 3, hotBarWidth / Constants.HOT_BAR_SLOTS - 6, hotBarHeight - 6);
             }
         }
