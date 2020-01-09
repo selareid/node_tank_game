@@ -127,6 +127,8 @@
             // console.info(event.deltaY);
             localUserList[userId].selectedHotBar = event.deltaY > 0 ? localUserList[userId].selectedHotBar >= Constants.HOT_BAR_SLOTS-1 ? 0 : localUserList[userId].selectedHotBar + 1
                 : localUserList[userId].selectedHotBar <= 0 ? 0 : localUserList[userId].selectedHotBar - 1;
+
+            socket.emit('selectedHotBarChange', localUserList[userId].selectedHotBar);
         });
 
         socket.emit('getUserList');

@@ -33,6 +33,10 @@ function io(io) {
             });
             io.emit('userList', Saves.Players.getActivePlayers());
 
+            socket.on('selectedHotBarChange', function (newSelectedHotBarSlot) { //TODO maybe bad because people scroll lots
+                Saves.Players.getPlayer(playerId).selectedHotBar = newSelectedHotBarSlot; //TODO maybe propagate to all the world (other players)
+            });
+
             socket.on('userMove', (newPosition) => {
                 let moveStatus = Saves.Players.getPlayer(playerId).move(Saves.World, newPosition);
                 // players[playerId].position.set(newPosition.x, newPosition.y); the old way
