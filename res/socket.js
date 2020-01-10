@@ -31,7 +31,7 @@ function io(io) {
                 time: Saves.World.time,
                 terrain: Saves.World.terrain
             });
-            io.emit('userList', Saves.Players.getActivePlayers());
+            socket.broadcast.emit('newPlayer', Saves.Players.getPlayerStripped(playerId));
 
             socket.on('selectedHotBarChange', function (newSelectedHotBarSlot) { //TODO maybe bad because people scroll lots
                 Saves.Players.getPlayer(playerId).selectedHotBar = newSelectedHotBarSlot; //TODO maybe propagate to all the world (other players)
@@ -56,7 +56,8 @@ function io(io) {
             //     players[playerId].shoot(Saves.World);
             // });
 
-            socket.on('getUserList', () => socket.emit('userList', Saves.Players.getActivePlayers()));
+            socket.on('getUserList', () => socket.emit('userList', Saves.Players.getActivePlayersStripped(playerId)));
+
             socket.on('disconnect', function () {
                 io.emit('userDisconnected', playerId);
                 Saves.World.disconnectedPlayer(socket.id);

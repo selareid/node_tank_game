@@ -48,13 +48,26 @@ const Saves = {
             return thePlayers[userId] !== null && thePlayers[userId] !== undefined;
         },
 
-        getActivePlayers: function() {
+        getActivePlayersStripped: function(playerToIgnore) {
+            return this.getActivePlayers(true, playerToIgnore);
+        },
+
+        /**
+         * getActivePlayers
+         * @param {boolean} stripped - whether or not to strip the active player data
+         * @param userToUnStrip - user to ignore when stripping
+         * @returns {{}}
+         */
+        getActivePlayers: function(stripped = false, userToUnStrip) {
             let toReturn = {};
 
             for (let socketId in theWorld.connectedPlayers) {
                 let playerId = theWorld.connectedPlayers[socketId];
 
-                toReturn[playerId] = thePlayers[playerId];
+                if (stripped && userToUnStrip !== playerId) {
+                    toReturn[playerId] = this.getPlayerStripped(playerId);
+                }
+                else toReturn[playerId] = thePlayers[playerId];
             }
 
             return toReturn;
@@ -62,6 +75,15 @@ const Saves = {
 
         getPlayers: function() {
             return thePlayers;
+        },
+
+        getPlayerStripped: function(userId) {
+            return { //stripped down version of player
+                id: thePlayers[userId].id,
+                position: thePlayers[userId].position,
+                dead: thePlayers[userId].dead,
+                selectedHotBarItem: thePlayers[userId].inventory[thePlayers[userId].selectedHotBar]
+            };
         },
 
         getPlayer: function(userId) {
