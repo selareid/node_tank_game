@@ -28,6 +28,13 @@ function intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
     return true;
 }
 
+function checkCollisionBetweenWalls(wall1, wall2) {
+    return wall1.position.x < wall2.position.x + (wall2.orientation === Constants.ORIENTATION_VERTICAL ? Constants.WALL_WIDTH : wall2.length) &&
+        wall1.position.x + (wall1.orientation === Constants.ORIENTATION_VERTICAL ? Constants.WALL_WIDTH : wall1.length) > wall2.position.x &&
+        wall1.position.y < wall2.position.y + (wall2.orientation === Constants.ORIENTATION_VERTICAL ? wall2.length : Constants.WALL_WIDTH) &&
+        wall1.position.y + (wall1.orientation === Constants.ORIENTATION_VERTICAL ? wall1.length : Constants.WALL_WIDTH) > wall2.position.y;
+}
+
 /**
  *
  * @param {Position|{x: number, y:number}} lineStart
@@ -164,5 +171,7 @@ function handleBulletWallCollision(bulletEntity, terrain, worldWidth, worldHeigh
 
 module.exports = {
     checkMoveTerrain: checkPlayerMoveTerrain,
-    handleBulletWallCollision
+    handleBulletWallCollision,
+    checkLineAgainstWall,
+    checkCollisionBetweenWalls
 };

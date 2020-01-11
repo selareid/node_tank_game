@@ -17,15 +17,18 @@ function getNewPlayerId() {
 const Saves = {
     get World() {
         if (!theWorld) { //TODO have actual saving lol
-            theWorld = new World(250, 250);
+            theWorld = new World(100, 100);
 
-            for (let i = 0; i< 7; i++) {
-                theWorld.addTerrain(Constants.TERRAIN_WALL,
+            for (let i = 0; i< 13; i++) {
+                let wallStatus = theWorld.addTerrain(Constants.TERRAIN_WALL,
                     new Position(Math.floor(Math.random() * theWorld.width - theWorld.width / 2), Math.floor(Math.random() * theWorld.height - theWorld.height / 2)), {
                         orientation: Math.floor(Math.random() * 2) >= 1 ? Constants.ORIENTATION_VERTICAL : Constants.ORIENTATION_HORIZONTAL,
                         length: Math.max(Math.floor(Math.random() * 50) + 5, Constants.WALL_WIDTH)
                     });
+
+                if (wallStatus === Constants.ERR_ILLEGAL) console.log('failed to make wall ' + i);
             }
+
 
             // let newBulletAngle;
             // for (let i = 0; i < 100; i++) {

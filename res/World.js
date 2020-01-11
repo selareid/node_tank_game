@@ -86,7 +86,22 @@ class World {
             case Constants.TERRAIN_WALL:
                 if (options.length < Constants.WALL_WIDTH) throw Constants.ERR_INVALID_ARGUMENTS;
 
-                this.terrain[terrainId] = new Wall(position, options.orientation, options.length);
+                let newWall = new Wall(position, options.orientation, options.length);
+
+                //check collision with other walls
+                for (let terrainId in this.terrain) {
+                    let terrain = this.terrain[terrainId];
+
+                    if (terrain.type === Constants.TERRAIN_WALL && collisions.checkCollisionBetweenWalls(newWall, terrain)) return Constants.ERR_ILLEGAL;
+                }
+
+                //check collision with world edge
+                if (collisions.checkLineAgainstWall(new Position(-this.width/2, -this.height/2), new Position(this.width/2, this.height/2), newWall)
+                || collisions.checkLineAgainstWall(new Position(-this.width/2, -this.height/2), new Position(-this.width/2, this.height/2), newWall)
+                || collisions.checkLineAgainstWall(new Position(this.width/2, -this.height/2), new Position(this.width/2, this.height/2), newWall)
+                || collisions.checkLineAgainstWall(new Position(-this.width/2, this.height/2), new Position(this.width/2, this.height/2), newWall)) return Constants.ERR_ILLEGAL;
+
+                this.terrain[terrainId] = newWall;
                 break;
             default:
                 throw Constants.ERR_INVALID_ARGUMENTS;
