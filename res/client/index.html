@@ -89,17 +89,17 @@
 
         Draw.drawBoard();
 
-        let mouseButtonDown = false;
+        let middleMouseButtonDown = false;
 
         //attach mouse events start
         document.getElementById('mainCanvas').addEventListener('mousedown', function (event) {
-            if (event.button === 0) mouseButtonDown = true;
+            if (event.button === 1) middleMouseButtonDown = true;
 
             clickInput(topLeftPos.x + (relativeMousePosition.x - p) / 5, topLeftPos.y + (relativeMousePosition.y - p) / 5);
         });
 
         document.addEventListener('mouseup', function (event) {
-            if (event.button === 0) mouseButtonDown = false;
+            if (event.button === 1) middleMouseButtonDown = false;
         });
 
         document.getElementById('mainCanvas').addEventListener('mousemove', function (event) {
@@ -107,7 +107,7 @@
             relativeMousePosition.y = event.offsetY;
             relativeMousePosition.lastMove = new Date();
 
-            if (!mouseButtonDown) return;
+            if (!middleMouseButtonDown) return;
             topLeftPos.x -= Math.floor(event.movementX*1000/5)/1000;
             topLeftPos.y -= Math.floor(event.movementY*1000/5)/1000;
             Draw.drawBoard();
@@ -117,7 +117,16 @@
         //attach key press events
         document.addEventListener("keydown", event => {
             if (event.isComposing || event.keyCode === 229) return; //from example code - idk
-            if (event.keyCode === 87 || event.keyCode === 83 || event.keyCode ===  68 || event.keyCode ===  65 || event.keyCode === 32) keysDown[event.keyCode] = true;
+            if (event.keyCode === 87 || event.keyCode === 83 || event.keyCode === 68 || event.keyCode === 65 || event.keyCode === 32) keysDown[event.keyCode] = true;
+
+            //Handle hot bar changes via key press
+            if ((event.keyCode >= 49 && event.keyCode <= 57) || event.keyCode === 189 || event.keyCode === 187 || event.keyCode === 48) {
+                localUserList[userId].selectedHotBar = event.keyCode >= 49 && event.keyCode <= 57 ? event.keyCode - 49 : event.keyCode === 48 ? 9 : event.keyCode === 189 ? 10 : event.keyCode === 187 ? 11 : null;
+
+                if (localUserList[userId].selectedHotBar === null) console.log(`this shouldn't happen, what have you done U MONK! ${event.keyCode}`);
+
+                socket.emit('selectedHotBarChange', localUserList[userId].selectedHotBar);
+            }
         });
 
         document.addEventListener("keyup", event => {

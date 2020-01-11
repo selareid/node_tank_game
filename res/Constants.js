@@ -39,5 +39,6 @@ Constants = {
     ERR_SUCCEEDED: 1, //it be like that sometimes
     ERR_INVALID_ARGUMENTS: 2,
     ERR_ILLEGAL: 3,
-    ERR_TOO_FAST: 4
+    ERR_ILLEGAL_OVER_EDGE: 4,
+    ERR_TOO_FAST: 5
 };

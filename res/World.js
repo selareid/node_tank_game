@@ -96,10 +96,13 @@ class World {
                 }
 
                 //check collision with world edge
-                if (collisions.checkLineAgainstWall(new Position(-this.width/2, -this.height/2), new Position(this.width/2, this.height/2), newWall)
+                if (collisions.checkLineAgainstWall(new Position(-this.width/2, -this.height/2), new Position(this.width/2, -this.height/2), newWall)
                 || collisions.checkLineAgainstWall(new Position(-this.width/2, -this.height/2), new Position(-this.width/2, this.height/2), newWall)
                 || collisions.checkLineAgainstWall(new Position(this.width/2, -this.height/2), new Position(this.width/2, this.height/2), newWall)
-                || collisions.checkLineAgainstWall(new Position(-this.width/2, this.height/2), new Position(this.width/2, this.height/2), newWall)) return Constants.ERR_ILLEGAL;
+                || collisions.checkLineAgainstWall(new Position(-this.width/2, this.height/2), new Position(this.width/2, this.height/2), newWall)) return Constants.ERR_ILLEGAL_OVER_EDGE;
+
+                //check if over world edge
+                if (Math.abs(newWall.position.x) > this.width/2 || Math.abs(newWall.position.y) > this.height/2) return Constants.ERR_ILLEGAL_OVER_EDGE;
 
                 this.terrain[terrainId] = newWall;
                 break;
