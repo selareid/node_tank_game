@@ -197,7 +197,7 @@
             $('#time').text(data.time + ' ' + Math.round(1000/timeSinceLastTick));
             Draw.drawBoard(); //draw play field again, don't need to do sidebar cause players not updates
 
-            //TODO TODO MOVE STARTS
+            //TODO TODO MOVE SOMEWHERE ELSE STARTS
             //draws the hovered (square??) outline darken(??)
             if (options.hoverSelector) {
                 let gameMousePositionX = topLeftPos.x + (relativeMousePosition.x - p) / 5;
@@ -211,7 +211,7 @@
                 context.fillStyle = 'rgba(160,160,160,0.76)';
                 context.fillRect(p + gameMousePositionX * 5 - 5 / 2 * 5 - topLeftPos.x * 5, p + gameMousePositionY * 5 - 5 / 2 * 5 - topLeftPos.y * 5, 5 * 5, 5 * 5);
             }
-            //TODO TODO MOVE ENDS
+            //TODO TODO MOVE SOMEWHERE ELSE ENDS
 
 
             //TODO maybe update sidebar once added player things
