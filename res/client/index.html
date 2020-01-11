@@ -94,6 +94,8 @@
         //attach mouse events start
         document.getElementById('mainCanvas').addEventListener('mousedown', function (event) {
             if (event.button === 0) mouseButtonDown = true;
+
+            clickInput(topLeftPos.x + (relativeMousePosition.x - p) / 5, topLeftPos.y + (relativeMousePosition.y - p) / 5);
         });
 
         document.addEventListener('mouseup', function (event) {
@@ -259,6 +261,17 @@
         Draw.updateSideBar();
         socket.emit('userMove', localUserList[userId].position);
         if (options.track) Draw.center();
+    }
+
+    function clickInput(x, y) {
+        // console.log(`${x} ${y}`);
+
+        switch (localUserList[userId].inventory[localUserList[userId].selectedHotBar]) {
+            case Constants.ITEM_WALL:
+                socket.emit(`userItem-${Constants.ITEM_WALL}`, {x: x-Constants.WALL_WIDTH/2, y: y-Constants.WALL_WIDTH/2});
+                console.log('using wall');
+                break;
+        }
     }
 
     socket.on('userMoved', (info) => {
