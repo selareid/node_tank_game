@@ -95,7 +95,7 @@
         document.getElementById('mainCanvas').addEventListener('mousedown', function (event) {
             if (event.button === 1) middleMouseButtonDown = true;
 
-            clickInput(topLeftPos.x + (relativeMousePosition.x - p) / 5, topLeftPos.y + (relativeMousePosition.y - p) / 5);
+            clickInput(event.button, topLeftPos.x + (relativeMousePosition.x - p) / 5, topLeftPos.y + (relativeMousePosition.y - p) / 5);
         });
 
         document.addEventListener('mouseup', function (event) {
@@ -272,11 +272,13 @@
         if (options.track) Draw.center();
     }
 
-    function clickInput(x, y) {
+    function clickInput(buttonPressed, x, y) {
         // console.log(`${x} ${y}`);
 
         switch (localUserList[userId].inventory[localUserList[userId].selectedHotBar]) {
             case Constants.ITEM_WALL:
+                if (buttonPressed !== 0) break;
+
                 socket.emit(`userItem-${Constants.ITEM_WALL}`, {x: x-Constants.WALL_WIDTH/2, y: y-Constants.WALL_WIDTH/2});
                 console.log('using wall');
                 break;
