@@ -79,7 +79,7 @@ class World {
         let terrainId;
 
         do {
-            terrainId = Math.floor(Math.random() * 9999999);
+            terrainId = '' + Math.floor(Math.random() * 9999999);
         } while (this.terrain[terrainId] !== undefined && this.terrain[terrainId] !== null);
 
         switch (type) {
@@ -107,7 +107,7 @@ class World {
         let entityId;
 
         do {
-            entityId = Math.floor(Math.random() * 9999999);
+            entityId = '' + Math.floor(Math.random() * 9999999);
         } while (this.entities[entityId] !== undefined && this.entities[entityId] !== null);
 
         switch (type) {
