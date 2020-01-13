@@ -5,11 +5,12 @@ let app = require('express')();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
 
-app.get('/', (req, res) => {res.sendFile(__dirname + '/client/index.html');});
-app.get('/draws.js', (req, res) => {res.sendFile(__dirname + '/client/draws.js');});
-app.get('/collisions.js', (req, res) => {res.sendFile(__dirname + '/client/collisions.js');});
-app.get('/Constants.js', (req, res) => {res.sendFile(__dirname + '/Constants.js');});
-app.get('/Items.js', (req, res) => {res.sendFile(__dirname + '/client/Items.js');});
+app.get('/', (req, res) => {res.sendFile(__dirname + '/client/landing.html');});
+app.get('/game', (req, res) => {res.sendFile(__dirname + '/client/index.html');});
+app.get('/game/draws.js', (req, res) => {res.sendFile(__dirname + '/client/draws.js');});
+app.get('/game/collisions.js', (req, res) => {res.sendFile(__dirname + '/client/collisions.js');});
+app.get('/game/Constants.js', (req, res) => {res.sendFile(__dirname + '/Constants.js');});
+app.get('/game/Items.js', (req, res) => {res.sendFile(__dirname + '/client/Items.js');});
 
 /*
  * store everything in entity look-up table (walls, bullets, etc)
