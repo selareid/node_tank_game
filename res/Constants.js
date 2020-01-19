@@ -34,6 +34,7 @@ Constants = {
     BULLET_LIFETIME: 3000, //in milliseconds
 
     ITEM_WALL: 1,
+    ITEM_DIRT: 2,
 
     OK: 0,
     ERR_SUCCEEDED: 1, //it be like that sometimes
