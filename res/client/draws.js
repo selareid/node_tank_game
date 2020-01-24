@@ -157,12 +157,17 @@ const Draw = {
             if (localUserList[userId].inventory[i]) {
                 //TODO draw from image file
 
-                if (Items[localUserList[userId].inventory[i].id] && (Items[localUserList[userId].inventory[i].id].iconImage || Items[localUserList[userId].inventory[i].id].iconColour)) {
-                    context.fillStyle = Items[localUserList[userId].inventory[i].id].iconColour ? Items[localUserList[userId].inventory[i].id].iconColour : 'rgba(237,216,188,0.91)';
+                if (Items[localUserList[userId].inventory[i].id] && Items[localUserList[userId].inventory[i].id].iconImage) {
+                    let theImage = new Image(5*10, 5*10);
+                    theImage.src = Items[localUserList[userId].inventory[i].id].iconImage;
+                    context.drawImage(theImage, (cw - hotBarWidth) / 2 + i * hotBarWidth / Constants.HOT_BAR_SLOTS + 3, ch - 10 - hotBarHeight + 3, hotBarWidth / Constants.HOT_BAR_SLOTS - 6, hotBarHeight - 6);
                 }
-                else context.fillStyle = 'rgba(0,40,237,0.91)';
+                else {
+                    if (Items[localUserList[userId].inventory[i].id] && Items[localUserList[userId].inventory[i].id].iconColour) context.fillStyle = Items[localUserList[userId].inventory[i].id].iconColour;
+                    else context.fillStyle = 'rgba(0,40,237,0.91)';
 
-                context.fillRect((cw - hotBarWidth) / 2 + i * hotBarWidth / Constants.HOT_BAR_SLOTS + 3, ch - 10 - hotBarHeight + 3, hotBarWidth / Constants.HOT_BAR_SLOTS - 6, hotBarHeight - 6);
+                    context.fillRect((cw - hotBarWidth) / 2 + i * hotBarWidth / Constants.HOT_BAR_SLOTS + 3, ch - 10 - hotBarHeight + 3, hotBarWidth / Constants.HOT_BAR_SLOTS - 6, hotBarHeight - 6);
+                }
             }
         }
 

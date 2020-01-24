@@ -23,7 +23,7 @@ const Items = {
         name: "Dirt",
         description: "eww, dirt",
         walkable: true,
-        iconImage: null,
-        iconColour: 'rgb(156,117,31)' //TODO change to use icon
+        iconImage: "/items/dirt",
+        // iconColour: 'rgb(156,117,31)' //TODO change to use icon
     }
 };
