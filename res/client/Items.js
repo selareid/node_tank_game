@@ -5,6 +5,13 @@
  */
 
 const Items = {
+    [Constants.ITEM_PICKAXE]: {
+        name: "Pickaxe",
+        description: "pick a' da wall",
+        walkable: true,
+        iconImage: null,
+        iconColour: 'rgb(124,124,124)' //TODO change to use icon
+    },
     [Constants.ITEM_WALL]: {
         name: "Wall",
         description: "'tis wall",

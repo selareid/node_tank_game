@@ -17,7 +17,10 @@ class Player {
         this.position = require('./Saves.js').World.getNewPlayerPosition();
         this.ammo = Constants.PLAYER_MAX_AMMO;
         for (let i = 0; i < Constants.INVENTORY_SLOTS; i++) this.inventory[i] = null;
-        this.inventory[1] = Constants.ITEM_WALL; //TODO FREE ITEMS (REMOVE THIS)
+
+        this.inventory[1] = {id: Constants.ITEM_WALL}; //TODO FREE ITEMS (REMOVE THIS)
+        this.inventory[2] = {id: Constants.ITEM_DIRT}; //TODO FREE ITEMS (REMOVE THIS)
+        this.inventory[3] = {id: Constants.ITEM_PICKAXE}; //TODO FREE ITEMS (REMOVE THIS)
     }
 
     alive() {

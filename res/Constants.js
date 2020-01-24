@@ -36,6 +36,8 @@ Constants = {
     ITEM_WALL: 1,
     ITEM_DIRT: 2,
 
+    ITEM_PICKAXE: 3,
+
     OK: 0,
     ERR_SUCCEEDED: 1, //it be like that sometimes
     ERR_INVALID_ARGUMENTS: 2,

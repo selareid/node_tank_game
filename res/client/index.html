@@ -275,13 +275,16 @@
     function clickInput(buttonPressed, x, y) {
         // console.log(`${x} ${y}`);
 
-        switch (localUserList[userId].inventory[localUserList[userId].selectedHotBar]) {
-            case Constants.ITEM_WALL:
-                if (buttonPressed !== 0) break;
+        //handles the usage of selected items
+        if (localUserList[userId].inventory[localUserList[userId].selectedHotBar]) { //checks item selected exists
+            switch (localUserList[userId].inventory[localUserList[userId].selectedHotBar].id) { //do something based on selected item
+                case Constants.ITEM_WALL:
+                    if (buttonPressed !== 0) break;
 
-                socket.emit(`userItem-${Constants.ITEM_WALL}`, {x: x-Constants.WALL_WIDTH/2, y: y-Constants.WALL_WIDTH/2});
-                console.log('using wall');
-                break;
+                    socket.emit(`userItem-${Constants.ITEM_WALL}`, {x: x - Constants.WALL_WIDTH / 2, y: y - Constants.WALL_WIDTH / 2});
+                    console.log('using wall');
+                    break;
+            }
         }
     }
 

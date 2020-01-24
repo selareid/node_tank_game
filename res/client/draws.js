@@ -207,11 +207,13 @@ const Draw = {
         //draw hot bar end
 
         //handle mouse hover for items start
-        switch (localUserList[userId].inventory[localUserList[userId].selectedHotBar]) {
-            case Constants.ITEM_WALL:
-                context.fillStyle = 'rgba(108,108,108,0.85)';
-                context.fillRect(relativeMousePosition.x - Constants.WALL_WIDTH * 5 / 2, relativeMousePosition.y - Constants.WALL_WIDTH * 5 / 2, Constants.WALL_WIDTH * 5, Constants.WALL_WIDTH * 5);
-                break;
+        if (localUserList[userId].inventory[localUserList[userId].selectedHotBar]) {
+            switch (localUserList[userId].inventory[localUserList[userId].selectedHotBar].id) {
+                case Constants.ITEM_WALL:
+                    context.fillStyle = 'rgba(108,108,108,0.85)';
+                    context.fillRect(relativeMousePosition.x - Constants.WALL_WIDTH * 5 / 2, relativeMousePosition.y - Constants.WALL_WIDTH * 5 / 2, Constants.WALL_WIDTH * 5, Constants.WALL_WIDTH * 5);
+                    break;
+            }
         }
         //handle mouse hover for items end
     },
