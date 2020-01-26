@@ -2,6 +2,16 @@ const collisions = require('./collisions.js');
 const socketHandling = require('./socket.js');
 const {World, Position, Velocity} = require('./World.js');
 
+class InventoryItem {
+    id;
+    amount;
+
+    constructor(id, amount) {
+        this.id = id;
+        this.amount = amount;
+    }
+}
+
 class Player {
     id;
     position;
@@ -18,9 +28,9 @@ class Player {
         this.ammo = Constants.PLAYER_MAX_AMMO;
         for (let i = 0; i < Constants.INVENTORY_SLOTS; i++) this.inventory[i] = null;
 
-        this.inventory[1] = {id: Constants.ITEM_WALL}; //TODO FREE ITEMS (REMOVE THIS)
-        this.inventory[2] = {id: Constants.ITEM_DIRT}; //TODO FREE ITEMS (REMOVE THIS)
-        this.inventory[3] = {id: Constants.ITEM_PICKAXE}; //TODO FREE ITEMS (REMOVE THIS)
+        this.inventory[1] = new InventoryItem(Constants.ITEM_WALL, 5); //TODO FREE ITEMS (REMOVE THIS)
+        this.inventory[2] = new InventoryItem(Constants.ITEM_DIRT, Number.POSITIVE_INFINITY); //TODO FREE ITEMS (REMOVE THIS)
+        this.inventory[3] = new InventoryItem(Constants.ITEM_PICKAXE, Number.POSITIVE_INFINITY); //TODO FREE ITEMS (REMOVE THIS)
     }
 
     alive() {
@@ -47,16 +57,29 @@ Player.prototype.move = function(world, newPosition) { //TODO make move (max any
     return Constants.OK; //ran successfully
 };
 
-Player.prototype.useItem = {
-    [Constants.ITEM_WALL]: function (positionToPlace) {
-        let placeStatus = require('./Saves.js').World.addTerrain(Constants.TERRAIN_WALL, positionToPlace, {
-            orientation: Constants.ORIENTATION_HORIZONTAL,
-            length: Constants.WALL_WIDTH
-        });
+Player.prototype.checkUsageAllowed = function (itemId) {
+    return this.inventory[this.selectedHotBar] && this.inventory[this.selectedHotBar].id === itemId && this.inventory[this.selectedHotBar].amount > 0;
+};
 
-        //TODO if placing wall fails send original terrain to player placing (for later when I add client side checks that place on their end before server updates)
-        //TODO add client side checks
-    }
+Player.prototype.useItemUniversals = function () {
+    this.inventory[this.selectedHotBar].amount -= 1;
+
+    if (this.inventory[this.selectedHotBar].amount < 1) this.inventory[this.selectedHotBar] = null;
+};
+
+Player.prototype[`useItem${Constants.ITEM_WALL}`] = function (positionToPlace) {
+    if (!this.checkUsageAllowed(Constants.ITEM_WALL)) return Constants.ERR_ILLEGAL;
+
+    let placeStatus = require('./Saves.js').World.addTerrain(Constants.TERRAIN_WALL, positionToPlace, {
+        orientation: Constants.ORIENTATION_HORIZONTAL,
+        length: Constants.WALL_WIDTH
+    });
+
+    //TODO if placing wall fails send original terrain to player placing (for later when I add client side checks that place on their end before server updates)
+    //TODO add client side checks
+
+    this.useItemUniversals();
+    return placeStatus;
 };
 
 module.exports = {Player};

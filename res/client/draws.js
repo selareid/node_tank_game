@@ -155,8 +155,8 @@ const Draw = {
 
         for (let i = 0; i < Constants.HOT_BAR_SLOTS; i++) {
             if (localUserList[userId].inventory[i]) {
-                //TODO draw from image file
 
+                //draws from image file else colours square
                 if (Items[localUserList[userId].inventory[i].id] && Items[localUserList[userId].inventory[i].id].iconImage) {
                     let theImage = new Image(5*10, 5*10);
                     theImage.src = Items[localUserList[userId].inventory[i].id].iconImage;
