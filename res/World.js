@@ -26,8 +26,8 @@ class World {
 
     simulate() {
         this.time++;
-        this.width += 0.01;
-        this.height += 0.01;
+        this.width += 0.1;
+        this.height += 0.1;
 
         for (let entity_id in this.entities) {
             let entity = this.entities[entity_id];
