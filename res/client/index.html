@@ -250,13 +250,17 @@
     //     socket.emit('userShoot');
     // }
 
+    let last_get_world_info = new Date();
+
     function move(x, y) {
         if (moveCollidingWithTerrain(x, y) //entity collision checks
         || (Math.abs(localUserList[userId].position.x + x) + Constants.PLAYER_SIZE / 2 > worldInfo.width / 2 //world edge collision checks
                 || Math.abs(localUserList[userId].position.y + y) + Constants.PLAYER_SIZE / 2 > worldInfo.height / 2)) {
             if (Math.abs(x) > 0.1 || Math.abs(y) > 0.1) move(x === 0 ? 0 : (x > 0 ? 0.1 : -0.1), y === 0 ? 0 : (y > 0 ? 0.1 : -0.1)); //retry with smaller to get as close as allowed (not stuck 0.9 away cause move is 1)
             else if (Math.abs(x) > 0.01 || Math.abs(y) > 0.01) move(x === 0 ? 0 : (x > 0 ? 0.01 : -0.01), y === 0 ? 0 : (y > 0 ? 0.01 : -0.01)); //retry with smaller to get as close as allowed (not stuck 0.9 away cause move is 1)
-            socket.emit('getWorldInfo');
+
+            if (new Date() - last_get_world_info > 1200) socket.emit('getWorldInfo');
+            
             return;
         }
 
