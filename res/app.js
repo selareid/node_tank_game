@@ -5,13 +5,15 @@ let app = require('express')();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
 
-app.get('/', (req, res) => {res.sendFile(__dirname + '/client/landing.html');});
-app.get('/game', (req, res) => {res.sendFile(__dirname + '/client/index.html');});
-app.get('/game/draws.js', (req, res) => {res.sendFile(__dirname + '/client/draws.js');});
-app.get('/game/collisions.js', (req, res) => {res.sendFile(__dirname + '/client/collisions.js');});
-app.get('/game/Constants.js', (req, res) => {res.sendFile(__dirname + '/Constants.js');});
-app.get('/game/Items.js', (req, res) => {res.sendFile(__dirname + '/client/Items.js');});
-app.get('/items/dirt', (req, res) => {res.sendFile(__dirname + '/client/assets/items/dirt.png');});
+const url_base = '';
+
+app.get(url_base + '/', (req, res) => {res.sendFile(__dirname + '/client/landing.html');});
+app.get(url_base + '/game', (req, res) => {res.sendFile(__dirname + '/client/index.html');});
+app.get(url_base + '/game/draws.js', (req, res) => {res.sendFile(__dirname + '/client/draws.js');});
+app.get(url_base + '/game/collisions.js', (req, res) => {res.sendFile(__dirname + '/client/collisions.js');});
+app.get(url_base + '/game/Constants.js', (req, res) => {res.sendFile(__dirname + '/Constants.js');});
+app.get(url_base + '/game/Items.js', (req, res) => {res.sendFile(__dirname + '/client/Items.js');});
+app.get(url_base + '/items/dirt', (req, res) => {res.sendFile(__dirname + '/client/assets/items/dirt.png');});
 
 /*
  * store everything in entity look-up table (walls, bullets, etc)
