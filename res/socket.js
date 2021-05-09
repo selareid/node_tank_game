@@ -48,6 +48,15 @@ function io(io) {
                 }
             });
 
+            socket.on('getWorldInfo', () => {
+              socket.emit('worldInfo', {
+                  width: Saves.World.width,
+                  height: Saves.World.height,
+                  time: Saves.World.time,
+                  terrain: Saves.World.terrain
+              });
+            });
+
             socket.on('selectedHotBarChange', function (newSelectedHotBarSlot) { //TODO maybe bad because people scroll lots
                 Saves.Players.getPlayer(playerId).selectedHotBar = newSelectedHotBarSlot; //TODO maybe propagate to all the world (other players)
             });
