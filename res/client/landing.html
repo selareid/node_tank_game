@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <script>
+      const parsedUrl = new URL(window.location.href);
+    </script>
 </head>
 <body>
-<a href="/game">Click Here</a>
+  <a id="theOneButtonhere" href="#">Click Here</a>
+  <script>
+    let button = document.getElementById("theOneButtonhere");
+    button.href =  parsedUrl.href + "game"
+  </script>
 </body>
 </html>
