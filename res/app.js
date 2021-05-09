@@ -59,7 +59,7 @@ function loop() {
     if (Saves.World.time > 10000 + Math.random()*10000 - 5000) {
       Saves.World = undefined;
 
-      for id in Saves.Players.getPlayers() {
+      for (id in Saves.Players.getPlayers()) {
         Saves.Players.removePlayer(id);
       }
 
