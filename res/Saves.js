@@ -17,7 +17,7 @@ function getNewPlayerId() {
 const Saves = {
     get World() {
         if (!theWorld) { //TODO have actual saving lol
-            theWorld = new World(150, 150);
+            theWorld = new World(500, 500);
 
             for (let i = 0; i< 13; i++) {
                 let wallStatus = theWorld.addTerrain(Constants.TERRAIN_WALL,

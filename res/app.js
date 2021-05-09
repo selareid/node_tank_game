@@ -49,12 +49,17 @@ function run() {
 
 let lastTickStart;
 timeSinceLastTick = 0;
+let lastReset = 0;
 
 function loop() {
     if (lastTickStart) timeSinceLastTick = new Date() - lastTickStart;
     lastTickStart = new Date();
-
     // console.log(timeSinceLastTick);
+
+    if (Saves.World.time > 1000) {
+      Saves.World = undefined;
+      Saves.World;
+    }
 
     Saves.World.simulate(); //TODO simulate world
     io.emit('gameState', Saves.World.getGameState()); //send game state to users

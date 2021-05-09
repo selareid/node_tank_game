@@ -1,5 +1,5 @@
 Constants = {
-    SPAWN_AREA_SIZE: 10,
+    SPAWN_AREA_SIZE: 100,
 
     TERRAIN_WALL: 'wall',
     TERRAIN_DIRT: 'dirt',
