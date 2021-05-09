@@ -14,6 +14,9 @@ app.get(url_base + '/game/collisions.js', (req, res) => {res.sendFile(__dirname 
 app.get(url_base + '/game/Constants.js', (req, res) => {res.sendFile(__dirname + '/Constants.js');});
 app.get(url_base + '/game/Items.js', (req, res) => {res.sendFile(__dirname + '/client/Items.js');});
 app.get(url_base + '/items/dirt', (req, res) => {res.sendFile(__dirname + '/client/assets/items/dirt.png');});
+app.use(function(req, res) {
+  res.sendFile(__dirname + '/client/landing.html');
+});
 
 /*
  * store everything in entity look-up table (walls, bullets, etc)
