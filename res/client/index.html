@@ -260,7 +260,7 @@
             else if (Math.abs(x) > 0.01 || Math.abs(y) > 0.01) move(x === 0 ? 0 : (x > 0 ? 0.01 : -0.01), y === 0 ? 0 : (y > 0 ? 0.01 : -0.01)); //retry with smaller to get as close as allowed (not stuck 0.9 away cause move is 1)
 
             if (!isNaN(new Date() - last_get_world_info) && new Date() - last_get_world_info > 1200) {
-              console.log("brrrr " + new Date() - last_get_world_info);
+              console.log("brrrr " + (new Date() - last_get_world_info));
               socket.emit('getWorldInfo');
             }
 
