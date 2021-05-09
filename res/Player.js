@@ -28,7 +28,7 @@ class Player {
         this.ammo = Constants.PLAYER_MAX_AMMO;
         for (let i = 0; i < Constants.INVENTORY_SLOTS; i++) this.inventory[i] = null;
 
-        this.inventory[1] = new InventoryItem(Constants.ITEM_WALL, 5); //TODO FREE ITEMS (REMOVE THIS)
+        this.inventory[1] = new InventoryItem(Constants.ITEM_WALL, 69); //TODO FREE ITEMS (REMOVE THIS)
         //this.inventory[2] = new InventoryItem(Constants.ITEM_DIRT, Number.POSITIVE_INFINITY); //TODO FREE ITEMS (REMOVE THIS)
         //this.inventory[3] = new InventoryItem(Constants.ITEM_PICKAXE, Number.POSITIVE_INFINITY); //TODO FREE ITEMS (REMOVE THIS)
     }

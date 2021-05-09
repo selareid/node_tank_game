@@ -17,9 +17,9 @@ function getNewPlayerId() {
 const Saves = {
     get World() {
         if (!theWorld) { //TODO have actual saving lol
-            theWorld = new World(500, 500);
+            theWorld = new World(1000, 1000);
 
-            for (let i = 0; i< 50; i++) {
+            for (let i = 0; i< 100; i++) {
                 let wallStatus = theWorld.addTerrain(Constants.TERRAIN_WALL,
                     new Position(Math.floor(Math.random() * theWorld.width - theWorld.width / 2), Math.floor(Math.random() * theWorld.height - theWorld.height / 2)), {
                         orientation: Math.floor(Math.random() * 2) >= 1 ? Constants.ORIENTATION_VERTICAL : Constants.ORIENTATION_HORIZONTAL,
