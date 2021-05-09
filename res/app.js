@@ -56,6 +56,7 @@ function loop() {
     lastTickStart = new Date();
     // console.log(timeSinceLastTick);
 
+    //randomly reset world and players
     if (Saves.World.time > 10000 + Math.random()*10000 - 5000) {
       Saves.World = undefined;
 
