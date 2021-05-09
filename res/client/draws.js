@@ -194,6 +194,9 @@ const Draw = {
 
             context.fillStyle = 'rgba(255,255,255,0.51)';
             let hoveredSlot = Math.floor(((relativeMousePosition.x - cw/2 + hotBarWidth/2) * Constants.HOT_BAR_SLOTS) / hotBarWidth);
+
+            socket.emit('selectedHotBarChange', hoveredSlot);
+
             context.fillRect((cw - hotBarWidth) / 2 + hoveredSlot * hotBarWidth / Constants.HOT_BAR_SLOTS, ch - 10 - hotBarHeight, hotBarWidth / Constants.HOT_BAR_SLOTS, hotBarHeight);
 
             /* (cw - hotBarWidth) / 2 + i * hotBarWidth / Constants.HOT_BAR_SLOTS + 3 = xPos
