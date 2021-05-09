@@ -11,7 +11,7 @@
     <script src="/tank_game_api/game/Items.js"></script>
     <script>
         let parsedUrl = new URL(window.location.href);
-        var socket = io(parsedUrl.origin + "/tank_game_api");
+        var socket = io(parsedUrl.origin, {path: "/tank_game_api/socket.io"});
         let userId;
 
         socket.on('pleaseAuth', function () { //TODO get decent auth lol
