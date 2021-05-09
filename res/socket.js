@@ -53,7 +53,10 @@ function io(io) {
             });
 
             //use items
-            socket.on(`userItem-${Constants.ITEM_WALL}`, (positionGiven) => Saves.Players.getPlayer(playerId)[`useItem${Constants.ITEM_WALL}`](positionGiven));
+            socket.on(`userItem-${Constants.ITEM_WALL}`, (positionGiven) => {
+              Saves.Players.getPlayer(playerId)[`useItem${Constants.ITEM_WALL}`](positionGiven);
+              socket.on('getUserList', () => socket.emit('userList', Saves.Players.getActivePlayersStripped(playerId)));
+            });
 
             // socket.on('userShoot', () => {
             //     players[playerId].shoot(Saves.World);
