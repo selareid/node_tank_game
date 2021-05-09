@@ -159,7 +159,7 @@ const Draw = {
                 //draws from image file else colours square
                 if (Items[localUserList[userId].inventory[i].id] && Items[localUserList[userId].inventory[i].id].iconImage) {
                     let theImage = new Image(5*10, 5*10);
-                    theImage.src = Items[localUserList[userId].inventory[i].id].iconImage;
+                    theImage.src = "/tank_game_api" + Items[localUserList[userId].inventory[i].id].iconImage;
                     context.drawImage(theImage, (cw - hotBarWidth) / 2 + i * hotBarWidth / Constants.HOT_BAR_SLOTS + 3, ch - 10 - hotBarHeight + 3, hotBarWidth / Constants.HOT_BAR_SLOTS - 6, hotBarHeight - 6);
                 }
                 else {
