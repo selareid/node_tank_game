@@ -290,6 +290,8 @@
     }
 
     socket.on('userMoved', (info) => {
+        if (!localUserList[info.id]) return;
+
         localUserList[info.id].position = info.position;
         Draw.updateSideBar();
         Draw.drawBoard();
