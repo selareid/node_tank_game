@@ -10,7 +10,8 @@
     <script src="/tank_game_api/game/collisions.js"></script>
     <script src="/tank_game_api/game/Items.js"></script>
     <script>
-        var socket = io();
+        let parsedUrl = new URL(window.location.href);
+        var socket = io(parsedUrl.origin + "/tank_game_api");
         let userId;
 
         socket.on('pleaseAuth', function () { //TODO get decent auth lol
